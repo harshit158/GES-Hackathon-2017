@@ -26,19 +26,19 @@ app.get('/', function(req, res) {
 	res.send("Welcome to Fetchfind");
 });
 
-app.get('/get', function(req, res) {
+// app.get('/get', function(req, res) {
 	
-	db.ref('/Users').once('value',function(snap){
-		res.send(snap.val());
-	})
-});
+// 	db.ref('/Users').once('value',function(snap){
+// 		res.send(snap.val());
+// 	})
+// });
 
-app.get('/Users/:userId', function(req, res) {
-	var userid=req.params.userId
-	db.ref('Users/'+userid).set({Lost:'Harshit Sharma' ,
-						  Found:'Sindhra'})
-	res.send(req.params);
-});
+// app.get('/Users/:userId', function(req, res) {
+// 	var userid=req.params.userId
+// 	db.ref('Users/'+userid).set({Lost:'Harshit Sharma' ,
+// 						  Found:'Sindhra'})
+// 	res.send(req.params);
+// });
 
 
 
