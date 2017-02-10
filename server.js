@@ -2,7 +2,7 @@ var express = require('express');
 var	app = express();
 var	bodyParser = require('body-parser');
 var morgan = require('morgan');
-const firebase= require('firebase');
+// const firebase= require('firebase');
 
 // app.use(morgan('dev'));
 
@@ -13,11 +13,11 @@ var config = {
   databaseURL: "https://fetchfind-12fc9.firebaseio.com",
 };
 
-firebase.initializeApp(config);
-var db = firebase.database()
+// firebase.initializeApp(config);
+// var db = firebase.database()
 
-db.ref('Users/User 4').set({Lost:'Harshit Sharma' ,
-						  Found:'Sindhra'})
+// db.ref('Users/User 4').set({Lost:'Harshit Sharma' ,
+						  // Found:'Sindhra'})
 
 // BASE ROUTES 
 
