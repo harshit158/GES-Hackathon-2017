@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Lost and Found",
   "engines":{
-    "node": "0.10.25"
+    "node": "x.x.x"
   },
   "main": "server.js",
   "scripts": {
