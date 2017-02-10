@@ -28,17 +28,17 @@ app.get('/', function(req, res) {
 
 app.get('/get', function(req, res) {
 	
-	db.ref('/Users').on('value',function(snap){
+	db.ref('/Users').once('value',function(snap){
 		res.send(snap.val());
 	})
 });
 
-// app.get('/Users/:userId', function(req, res) {
-// 	var userid=req.params.userId
-// 	db.ref('Users/'+userid).set({Lost:'Harshit Sharma' ,
-// 						  Found:'Sindhra'})
-// 	res.send(req.params);
-// });
+app.get('/Users/:userId', function(req, res) {
+	var userid=req.params.userId
+	db.ref('Users/'+userid).set({Lost:'Harshit Sharma' ,
+						  Found:'Sindhra'})
+	res.send(req.params);
+});
 
 
 
