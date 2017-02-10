@@ -1,0 +1,23 @@
+{
+  "name": "fetchfind",
+  "version": "1.0.0",
+  "description": "Lost and Found",
+  "engines":{
+    "node": "0.10.25"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    // "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Harsh",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "node-fetch": "^1.5.2",
+    "morgan": "~1.8.0",
+    "express": "~4.14.1",
+    "body-parser": "~1.16.0",
+    "firebase": "~3.6.9"
+  }
+
+}
