@@ -23,7 +23,7 @@ app.get('/', function(req, res) {
 });
 
 
-app.get('/getLength/Wallet', function(req, res) {
+app.get('/getLength2/Wallet', function(req, res) {
 	db.ref('Wallet/').once('value',function(snap){
 		var jsonObject = snap.val();
 		var count=0;
@@ -45,7 +45,8 @@ app.get('/getLength/:addressForLength', function(req, res) {
 		for (var user in jsonObject){
 			count++;
 		}
-		res.send('Total number: '+count);
+		// res.send('Total number: '+count);
+		res.send(address);
 	});	
 });
 
