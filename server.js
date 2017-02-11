@@ -5,7 +5,8 @@ const firebase= require('firebase');
 app.set('port', (process.env.PORT || 3000))
 
 
-// Initializing firebase 
+// Initializing firebase -----------------------
+
 var config = {
   apiKey: "AIzaSyCUcgbm-0Yfhv1YF1UREO7iy8zZdoSNl5s",
   authDomain: " fetchfind-12fc9.firebaseapp.com",
@@ -15,20 +16,22 @@ var config = {
 firebase.initializeApp(config);
 var db = firebase.database()
 
-// db.ref('Users/User 4').set({Lost:'Harshit Sharma',Found:'Sindhra'})
-
-// BASE ROUTES 
-
+// Routes ---------------------------------------
+// Checking the server
 app.get('/', function(req, res) {
 	res.send("Welcome to Fetchfind");
 });
 
-app.get('/getdata', function(req, res) {
+// Getting the length of any node
+app.get('/length', function(req, res) {
+	// var address = addressForLength;
 	db.ref('/Users').once('value',function(snap){
-		res.send(JSON.stringify(snap.val()));
+		var jsonObject = JSON.stringify(snap.val());
+		res.send(Object.keys(jsonObject).length);
 	});
 });
 
+// Only for Users node
 app.get('/Users/:userId', function(req, res) {
 	var userid=req.params.userId;
 	db.ref('Users/'+userid).set({Lost:'' ,Found:''});
