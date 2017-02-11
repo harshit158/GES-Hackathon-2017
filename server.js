@@ -31,7 +31,7 @@ app.get('/length', function(req, res) {
 		for (var user in jsonObject){
 			count++;
 		}
-		res.send(count);
+		res.send(jsonObject['1188061224645981']);
 	});
 });
 
