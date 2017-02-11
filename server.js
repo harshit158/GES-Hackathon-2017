@@ -28,10 +28,10 @@ app.get('/length', function(req, res) {
 	db.ref('/Users').once('value',function(snap){
 		var jsonObject = snap.val();
 		var count=0;
-		// for (var user in jsonObject){
-		// 	count++;
-		// }
-		res.send(Object.keys(jsonObject).length);
+		for (var user in jsonObject){
+			count++;
+		}
+		res.send(count);
 	});
 });
 
