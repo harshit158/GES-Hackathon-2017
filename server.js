@@ -33,7 +33,7 @@ app.get('/length', function(req, res) {
 		for (var user in jsonObject){
 			count++;
 		}
-		res.send(count);
+		res.send(jsonObject);
 });
 
 // Only for Users node
