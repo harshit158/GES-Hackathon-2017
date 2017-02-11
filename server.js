@@ -34,7 +34,7 @@ app.get('/getLength/:addressForLength', function(req, res) {
 			count++;
 		}
 		res.setHeader('Content-Type', 'application/json');
-		res.send(JSON.stringify({'Total number: ':count}));
+		res.json({'Total number: ':count});
 	});	
 });
 
