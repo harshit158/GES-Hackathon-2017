@@ -22,6 +22,18 @@ app.get('/', function(req, res) {
 	res.send("Welcome to Fetchfind");
 });
 
+
+app.get('/getLength/Wallet', function(req, res) {
+	db.ref('Wallet/').once('value',function(snap){
+		var jsonObject = snap.val();
+		var count=0;
+		for (var user in jsonObject){
+			count++;
+		}
+		res.send('Total number: '+count);
+	});	
+});
+
 // Getting the length of any node
 app.get('/getLength/:addressForLength', function(req, res) {
 	var address = req.params.addressForLength;
@@ -34,10 +46,9 @@ app.get('/getLength/:addressForLength', function(req, res) {
 			count++;
 		}
 		res.send('Total number: '+count);
-	});
-	
-		
+	});	
 });
+
 
 // Only for Users node
 app.get('/Users/:userId', function(req, res) {
