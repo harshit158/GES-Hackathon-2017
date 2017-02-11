@@ -27,7 +27,7 @@ app.get('/length', function(req, res) {
 	// var address = addressForLength;
 	db.ref('/Users').once('value',function(snap){
 		var jsonObject = JSON.stringify(snap.val());
-		res.send(Object.keys(jsonObject).length);
+		res.send(jsonObject);
 	});
 });
 
