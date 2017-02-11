@@ -33,7 +33,7 @@ app.get('/getLength/:addressForLength', function(req, res) {
 		for (var user in jsonObject){
 			count++;
 		}
-		res.send(address);
+		res.send('Total number: '+count);
 	});
 	
 		
