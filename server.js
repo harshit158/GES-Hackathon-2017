@@ -31,8 +31,7 @@ app.get('/getdata', function(req, res) {
 
 app.get('/Users/:userId', function(req, res) {
 	var userid=req.params.userId;
-	db.ref('Users/'+userid).set({Lost:'Key' ,Found:'Wallet'});
-	res.send(req.params);
+	db.ref('Users/'+userid).set();
 });
 
 // start the server
