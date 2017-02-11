@@ -26,8 +26,8 @@ app.get('/', function(req, res) {
 app.get('/length', function(req, res) {
 	// var address = addressForLength;
 	db.ref('/Users').once('value',function(snap){
-		var jsonObject = JSON.stringify(snap.val());
-		var count=0
+		var jsonObject = snap.val();
+		var count=0;
 		for (var user in jsonObject){
 			count++;
 		}
