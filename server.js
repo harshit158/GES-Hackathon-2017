@@ -25,7 +25,7 @@ app.get('/', function(req, res) {
 
 app.get('/getdata', function(req, res) {
 	db.ref('/Users').once('value',function(snap){
-		res.send(snap.val());
+		res.send(JSON.stringify(snap.val()));
 	});
 });
 
