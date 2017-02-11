@@ -32,7 +32,7 @@ app.get('/length', function(req, res) {
 		for (var user in jsonObject){
 			count++;
 		}
-		res.send('Total Number: 'count);
+		res.send('Total Number: '+count);
 	});
 	
 		
