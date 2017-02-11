@@ -1,6 +1,7 @@
 var express = require('express');
 var	app = express();
-var	bodyParser = require('body-parser');
+
+app.set('port', (process.env.PORT || 5000))
 var morgan = require('morgan');
 // const firebase= require('firebase');
 
@@ -43,7 +44,6 @@ app.get('/', function(req, res) {
 
 
 // start the server
-
-app.listen('3000', function(){
-	console.log('server is running')
-});
+app.listen(app.get('port'), function() {
+  console.log("Node app is running at localhost:" + app.get('port'))
+})

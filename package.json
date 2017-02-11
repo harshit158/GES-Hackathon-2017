@@ -2,10 +2,10 @@
   "name": "fetchfind",
   "version": "1.0.0",
   "description": "Lost and Found",
-  "engines":{
-    "node": "0.10.x"
-  },
   "main": "server.js",
+  "engines":{
+    "node": "4.5.0"
+  },
   "scripts": {
     "start": "node server.js"
   },
