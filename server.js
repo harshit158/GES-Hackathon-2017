@@ -24,7 +24,7 @@ app.get('/', function(req, res) {
 
 // Getting the length of any node
 app.get('/getLength/:addressForLength', function(req, res) {
-	var address = addressForLength;
+	var address = req.params.addressForLength;
 	res.send('dlfkldfd');
 	// db.ref(address).once('value',function(snap){
 	// 	var jsonObject = snap.val();
