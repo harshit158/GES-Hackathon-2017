@@ -28,12 +28,13 @@ app.get('/length', function(req, res) {
 	var jsonObject;
 	db.ref('/Users').once('value',function(snap){
 		jsonObject = snap.val();
+		res.send(jsonObject);
 	});
 	var count=0;
 		for (var user in jsonObject){
 			count++;
 		}
-		res.send(jsonObject);
+		
 });
 
 // Only for Users node
