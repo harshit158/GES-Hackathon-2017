@@ -23,11 +23,10 @@ app.get('/', function(req, res) {
 });
 
 // Getting the length of any node
-app.get('/length', function(req, res) {
-	// var address = addressForLength;
-	var jsonObject;
-	db.ref('/Users').once('value',function(snap){
-		jsonObject = snap.val();
+app.get('/getLength/:addressForLength', function(req, res) {
+	var address = addressForLength;
+	db.ref(address).once('value',function(snap){
+		var jsonObject = snap.val();
 		var count=0;
 		for (var user in jsonObject){
 			count++;
