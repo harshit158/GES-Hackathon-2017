@@ -49,12 +49,11 @@ app.get('/Users/search/:userId', function(req, res) {
 	var userToSearch=req.params.userId;
 	db.ref('Users/').once('value',function(snap){
 		var jsonObject = snap.val();
-		for (var user in jsonObject){
-			if(user===userToSearch)
-				res.send("yes");
+		if(jsonObject.hasOwnProperty(userToSearch)){
+			res.send("yes");
 		}		
+		else res.send("no");
 	});	
-	res.send("no");
 });
 
 
