@@ -51,9 +51,8 @@ app.get('/Users/search/:userId', function(req, res) {
 		var jsonObject = snap.val();
 		for (var user in jsonObject){
 			if(user===userId)
-				res.send("yes");
-		}
-		
+				res.send(userId);
+		}		
 	});	
 	// res.send("no");
 });
