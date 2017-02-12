@@ -46,7 +46,7 @@ app.get('/Users/:userId', function(req, res) {
 
 // For searching if a user has already submitted any
 app.get('/Users/search/:userId', function(req, res) {
-	var userToSearch=req.params;
+	var userToSearch=req.params.userId;
 	res.send(userToSearch);
 	// db.ref('Users/').once('value',function(snap){
 	// 	var jsonObject = snap.val();
