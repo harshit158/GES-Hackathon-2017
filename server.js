@@ -55,7 +55,7 @@ app.get('/Users/search/:userId', function(req, res) {
 		}
 		
 	});	
-	res.send("no");
+	// res.send("no");
 });
 
 
