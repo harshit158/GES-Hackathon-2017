@@ -38,12 +38,28 @@ app.get('/getLength/:addressForLength', function(req, res) {
 	});	
 });
 
+app.get()
+
 
 // Only for Users node
 app.get('/Users/:userId', function(req, res) {
 	var userid=req.params.userId;
 	db.ref('Users/'+userid).set({Lost:'' ,Found:''});
 });
+
+// For searching if a user has already submitted any
+app.get('/Users/search/:userId', function(req, res) {
+	var userid=req.params.userId;
+	db.ref('Users/').once('value',function(snap){
+		var jsonObject = snap.val();
+		for (var user in jsonObject){
+			if(user==userId)
+				res.send("yes");
+		}
+		res.send("no");
+	});	
+});
+
 
 // start the server
 app.listen(app.get('port'), function() {
