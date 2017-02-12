@@ -38,9 +38,6 @@ app.get('/getLength/:addressForLength', function(req, res) {
 	});	
 });
 
-app.get()
-
-
 // Only for Users node
 app.get('/Users/:userId', function(req, res) {
 	var userid=req.params.userId;
