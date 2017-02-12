@@ -33,8 +33,8 @@ app.get('/getLength/:addressForLength', function(req, res) {
 		for (var user in jsonObject){
 			count++;
 		}
-		res.setHeader('Content-Type', 'application/json');
-		res.json({'Total number: ':count});
+		// res.setHeader('Content-Type', 'application/json');
+		res.send({'Total number: ':count});
 	});	
 });
 
