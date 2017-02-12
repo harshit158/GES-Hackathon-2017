@@ -50,8 +50,8 @@ app.get('/Users/search/:userId', function(req, res) {
 	db.ref('Users/').once('value',function(snap){
 		var jsonObject = snap.val();
 		for (var user in jsonObject){
-			// if(user===userId)
-				res.send(user);
+			if(user===userId)
+				res.send("yes");
 		}
 		
 	});	
