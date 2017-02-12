@@ -54,7 +54,7 @@ app.get('/Users/search/:userId', function(req, res) {
 	// 		if(user===userId)
 	// 			res.send(userId);
 	// 	}		
-	});	
+	// });	
 	// res.send("no");
 });
 
