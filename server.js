@@ -13,6 +13,7 @@ var config = {
   databaseURL: "https://fetchfind-12fc9.firebaseio.com",
 };
 
+firebase.database.enableLogging(true);
 firebase.initializeApp(config);
 var db = firebase.database()
 
@@ -38,13 +39,14 @@ app.get('/getLength/:addressForLength', function(req, res) {
 	});	
 });
 
-// Only for Users node
+// Adding new user to database
 app.get('/Users/:userId', function(req, res) {
-	var userid=req.params.userId;
-	db.ref('Users/'+userid).set({Lost:'' ,Found:''});
+	var userid=req.params.userId.split('+')[0];
+	var userName=req.params.userId.split('+')[1];
+	db.ref('Users/'+userid).update({Name:userName});
 });
 
-// For searching if a user has already submitted any
+// Searching if a user has already submitted any preivious request
 app.get('/Users/search/:userId', function(req, res) {
 	var userToSearch=req.params.userId;
 	db.ref('Users/').once('value',function(snap){
