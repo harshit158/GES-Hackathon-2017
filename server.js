@@ -54,7 +54,7 @@ app.get('/updateItems/:Itemdata', function(req, res) {
 
 	//Pushing to individual items node
 	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
-	var userid=JSON.parse(data)['userid'];
+	var userid=data['userid'];
 	var updates={};
 
 	updates[item+'/'+ foundOrlost +'/'+newPostKey]=data;
