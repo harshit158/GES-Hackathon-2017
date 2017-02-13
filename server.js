@@ -41,10 +41,21 @@ app.get('/getLength/:addressForLength', function(req, res) {
 
 // Adding new user to database
 app.get('/Users/:userId', function(req, res) {
-	var userid=req.params.userId.split('+')[0];
-	var userName=req.params.userId.split('+')[1];
+	var userid = req.params.userId.split('+')[0];
+	var userName = req.params.userId.split('+')[1];
 	db.ref('Users/'+userid).update({Name:userName});
 });
+
+// Updating the Items
+app.get('/updateItems/:Itemdata', function(req, res) {
+	var item = req.params.Itemdata.split('+')[0];
+	var foundOrlost = req.params.Itemdata.split('+')[1];
+	var data = req.params.userId.split('+')[2];
+	Map<String,Object> result = new ObjectMapper().readValue(data, HashMap.class);
+	res.send(result);
+	// db.ref(item+'/'+ foundOrlost + data).update(result);
+});
+
 
 // Searching if a user has already submitted any preivious request
 app.get('/Users/search/:userId', function(req, res) {
