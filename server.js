@@ -58,14 +58,11 @@ app.get('/updateItems/:Itemdata', function(req, res) {
 	var updates={};
 
 	updates[item+'/'+ foundOrlost +'/'+newPostKey]=data;
-	updates['Users/'+userid]={foundOrlost:newPostKey};
+	updates['Users/'+userid+'/'+foundOrlost]=newPostKeys;
 
 	db.ref().update(updates);
 
 	// db.ref(item+'/'+ foundOrlost).push(JSON.parse(data));
-
-	//Adding id of items to corresponding users
-	
 	// db.ref('Users/'+userid).update({foundOrlost:newPostKey});
 });
 
