@@ -51,9 +51,15 @@ app.get('/updateItems/:Itemdata', function(req, res) {
 	var item = req.params.Itemdata.split('+')[0];
 	var foundOrlost = req.params.Itemdata.split('+')[1];
 	var data = req.params.Itemdata.split('+')[2];
-	// Map<String,Object> result = new ObjectMapper().readValue(data, HashMap.class);
-	// res.send(JSON.parse(data));
+
+	//Pushing to individual items node
 	db.ref(item+'/'+ foundOrlost).push(JSON.parse(data));
+
+	//Adding id of items to corresponding users
+	var userid=data['userid'];
+	new newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
+	db.ref('Users/'+userid).update({foundOrlost:newPostKey});
+	db.ref('Users'+'/'+ foundOrlost+'/'+newPostKey).push(JSON.parse(data));
 });
 
 
