@@ -53,7 +53,7 @@ app.get('/updateItems/:Itemdata', function(req, res) {
 	var data = req.params.Itemdata.split('+')[2];
 	// Map<String,Object> result = new ObjectMapper().readValue(data, HashMap.class);
 	// res.send(JSON.parse(data));
-	db.ref(item+'/'+ foundOrlost).update(JSON.parse(data));
+	db.ref(item+'/'+ foundOrlost).push(JSON.parse(data));
 });
 
 
