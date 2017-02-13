@@ -58,7 +58,7 @@ app.get('/updateItems/:Itemdata', function(req, res) {
 	var updates={};
 
 	updates[item+'/'+ foundOrlost +'/'+newPostKey]=data;
-	updates['Users/'+userid]=[{ foundOrlost : newPostKey}];
+	updates['Users/'+userid]={ newPostKey : foundOrlost };
 
 	db.ref().update(updates);
 
