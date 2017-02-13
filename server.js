@@ -52,8 +52,8 @@ app.get('/updateItems/:Itemdata', function(req, res) {
 	var foundOrlost = req.params.Itemdata.split('+')[1];
 	var data = req.params.Itemdata.split('+')[2];
 	// Map<String,Object> result = new ObjectMapper().readValue(data, HashMap.class);
-	res.send(JSON.parse(data));
-	// db.ref(item+'/'+ foundOrlost + data).update(result);
+	// res.send(JSON.parse(data));
+	db.ref(item+'/'+ foundOrlost + data).update(JSON.parse(data));
 });
 
 
