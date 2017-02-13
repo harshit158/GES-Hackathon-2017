@@ -58,7 +58,7 @@ app.get('/updateItems/:Itemdata', function(req, res) {
 	//Adding id of items to corresponding users
 	var userid=JSON.parse(data)['userid'];
 	// res.send(userid);
-	new newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
+	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
 	db.ref('Users/'+userid).update({foundOrlost:newPostKey});
 	db.ref('Users'+'/'+ foundOrlost+'/'+newPostKey).push(JSON.parse(data));
 });
