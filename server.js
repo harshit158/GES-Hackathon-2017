@@ -50,17 +50,22 @@ app.get('/Users/:userId', function(req, res) {
 app.get('/updateItems/:Itemdata', function(req, res) {
 	var item = req.params.Itemdata.split('+')[0];
 	var foundOrlost = req.params.Itemdata.split('+')[1];
-	var data = req.params.Itemdata.split('+')[2];
+	var data = JSON.parse(req.params.Itemdata.split('+')[2]);
 
 	//Pushing to individual items node
-	db.ref(item+'/'+ foundOrlost).push(JSON.parse(data));
+	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
+	var updates={};
+	updates[item+'/'+ foundOrlost +'/'+newPostKey]=data;
+	updates['Users/'+userid]={foundOrlost:newPostKey};
+
+	db.ref().update(updates);
+
+	// db.ref(item+'/'+ foundOrlost).push(JSON.parse(data));
 
 	//Adding id of items to corresponding users
-	var userid=JSON.parse(data)['userid'];
-	// res.send(userid);
-	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
-	db.ref('Users/'+userid).update({foundOrlost:newPostKey});
-	db.ref('Users'+'/'+ foundOrlost+'/'+newPostKey).push(JSON.parse(data));
+	// var userid=JSON.parse(data)['userid'];
+	
+	// db.ref('Users/'+userid).update({foundOrlost:newPostKey});
 });
 
 
