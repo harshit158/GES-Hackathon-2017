@@ -1,14 +1,6 @@
 var express = require('express');
 var	app = express();
-
-
-
 const firebase= require('firebase');
-firebase.database.enableLogging(true);
-firebase.initializeApp(config);
-var db = firebase.database()
-
-
 
 var najax = $ = require('najax')
 
@@ -23,13 +15,16 @@ var config = {
   databaseURL: "https://fetchfind-12fc9.firebaseio.com",
 };
 
+firebase.database.enableLogging(true);
+firebase.initializeApp(config);
+var db = firebase.database()
 
 // Routes ---------------------------------------
 // Checking the server
 app.get('/', function(req, res) {
 	// res.send("Welcome to Fetchfind");
 	$.get('http://ws.geonames.org/countryCodeJSON?lat=49.03&lng=10.2&username=fetchfindbot', function(result){
-		res.send("Hi! Lets see the results@\n\n\n"+typeof(result));
+		res.send("Hi! Lets see the results@\n\n\n"+JSON.parse(result)["countryName"]);
 	});
 });
 
