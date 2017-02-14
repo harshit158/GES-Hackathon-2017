@@ -82,11 +82,11 @@ app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
 
 
 	//getcountrycode from the lat lang
-	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["Lat"]+"&lng="+data["Lang"]+"&username=fetchfindbot";
+	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["lat"]+"&lng="+data["lang"]+"&username=fetchfindbot";
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
 
-		if(islost){
+		if(islost=="true"){
 		//Update lost items , Match items , Send status to bot
 		db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data)
 		}
