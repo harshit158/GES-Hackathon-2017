@@ -86,7 +86,7 @@ app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
 
-		if(islost=="true"){
+		if(islost===true){
 		//Update lost items , Match items , Send status to bot
 		db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data)
 		}
