@@ -2,6 +2,8 @@ var express = require('express');
 var	app = express();
 const firebase= require('firebase');
 
+var najax = $ = require('najax')
+
 app.set('port', (process.env.PORT || 3000))
 
 
@@ -20,7 +22,10 @@ var db = firebase.database()
 // Routes ---------------------------------------
 // Checking the server
 app.get('/', function(req, res) {
-	res.send("Welcome to Fetchfind");
+	// res.send("Welcome to Fetchfind");
+	$.get('http://ws.geonames.org/countryCodeJSON?lat=49.03&lng=10.2&username=fetchfindbot', function(result){
+		res.send("Hi! Lets see the results@\n\n\n"+result);
+	});
 });
 
 // Getting the length of any node
@@ -30,10 +35,7 @@ app.get('/getLength/:addressForLength', function(req, res) {
 	address=address.join('/')
 	db.ref(address).once('value',function(snap){
 		var jsonObject = snap.val();
-		var count=0;
-		for (var user in jsonObject){
-			count++;
-		}
+		var count=Object.keys(jsonObject).length;
 		// res.setHeader('Content-Type', 'application/json');
 		res.send({'Total number: ':count});
 	});	
@@ -47,10 +49,27 @@ app.get('/Users/:userId', function(req, res) {
 });
 
 // Updating the Items
-app.get('/updateItems/:Itemdata', function(req, res) {
-	var item = req.params.Itemdata.split('+')[0];
-	var foundOrlost = req.params.Itemdata.split('+')[1];
-	var data = JSON.parse(req.params.Itemdata.split('+')[2]);
+app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
+	// var item = req.params.Itemdata.split('+')[0];
+	// var foundOrlost = JSON.parse(req.params.Itemdata.split('+')[2])["islost"];
+	var data = JSON.parse(req.params.Itemdata);
+	var islost = data["islost"];
+
+
+	//getcountrycode from the lat lang
+
+	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;uj
+	if(islost){
+		//Update lost items , Match items , Send status to bot  
+
+
+
+	}
+	else{
+		//Update found items , Match items , Send status to bot
+
+
+	}
 
 	//Pushing to individual items node as well as users
 	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
@@ -81,6 +100,18 @@ app.get('/Users/search/:userId', function(req, res) {
 		else res.send("no");
 	});	
 });
+
+app.get('//search/:userId', function(req, res) {
+	var userToSearch=req.params.userId;
+	db.ref('Users/').once('value',function(snap){
+		var jsonObject = snap.val();
+		if(jsonObject.hasOwnProperty(userToSearch)){
+			res.send("yes");
+		}		
+		else res.send("no");
+	});	
+});
+
 
 
 // start the server
