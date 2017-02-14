@@ -29,7 +29,7 @@ var config = {
 app.get('/', function(req, res) {
 	// res.send("Welcome to Fetchfind");
 	$.get('http://ws.geonames.org/countryCodeJSON?lat=49.03&lng=10.2&username=fetchfindbot', function(result){
-		res.send("Hi! Lets see the results@\n\n\n"+result["countryName"]);
+		res.send("Hi! Lets see the results@\n\n\n"+typeof(result));
 	});
 });
 
