@@ -6,6 +6,33 @@ var najax = $ = require('najax')
 
 app.set('port', (process.env.PORT || 3000))
 
+/* Data LOST
+DATA={
+                  "islost":true,
+                  "name":event.senderobj.display,
+                  "userid":event.sender,
+                  "phone":context.simpledb.roomleveldata.phone,
+                  "itemtype":context.simpledb.roomleveldata.itemtype,
+                  "description":context.simpledb.roomleveldata.description,
+                  "reward":context.simpledb.roomleveldata.reward,
+                  "lat":context.simpledb.roomleveldata.lat,
+                  "lang":context.simpledb.roomleveldata.lang
+               };
+
+Data FOUND
+DATA={
+                  "islost":false,
+                  "name":event.senderobj.display,
+                  "userid":event.sender,
+                  "phone":context.simpledb.roomleveldata.phone,
+                  "itemtype":context.simpledb.roomleveldata.itemtype,
+                  "description":context.simpledb.roomleveldata.description,
+                  "foundimage":context.simpledb.roomleveldata.foundimage,
+                  "lat":context.simpledb.roomleveldata.lat,
+                  "lang":context.simpledb.roomleveldata.lang
+               };
+
+*/
 
 // Initializing firebase -----------------------
 
@@ -22,10 +49,8 @@ var db = firebase.database()
 // Routes ---------------------------------------
 // Checking the server
 app.get('/', function(req, res) {
-	// res.send("Welcome to Fetchfind");
-	$.get('http://ws.geonames.org/countryCodeJSON?lat=49.03&lng=10.2&username=fetchfindbot', function(result){
-		res.send("Hi! Lets see the results@\n\n\n"+JSON.parse(result)["countryName"]);
-	});
+	 res.send("Welcome to Fetchfind");
+	
 });
 
 // Getting the length of any node
@@ -57,35 +82,34 @@ app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
 
 
 	//getcountrycode from the lat lang
+	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["Lat"]+"&lng="+data["Lang"]+"&username=fetchfindbot";
+	$.get(locationpoocho,function(result){
+		var countryCode=JSON.parse(result)["countryCode"];
 
-	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;uj
-	if(islost){
-		//Update lost items , Match items , Send status to bot  
+		if(islost){
+		//Update lost items , Match items , Send status to bot
+		db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data)
+		}
+		else{
+			//Update found items , Match items , Send status to bot
+		db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data)	
+		}
 
-
-
-	}
-	else{
-		//Update found items , Match items , Send status to bot
-
-
-	}
+		});
 
 	//Pushing to individual items node as well as users
-	var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
-	var userid=data['userid'];
-	var updates={};
+	// var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
+	// var userid=data['userid'];
+	// var updates={};
 
-	updates[item+'/'+ foundOrlost +'/'+newPostKey]=data;
+	// updates[item+'/'+ foundOrlost +'/'+newPostKey]=data;
 	
-	var jsonObject={}
-	jsonObject[newPostKey]=foundOrlost;
-	updates['Users/'+userid+'/'+ foundOrlost]=jsonObject;
+	// var jsonObject={}
+	// jsonObject[newPostKey]=foundOrlost;
+	// updates['Users/'+userid+'/'+ foundOrlost]=jsonObject;
 
-	db.ref().update(updates);
+	// db.ref().update(updates);
 
-	// db.ref(item+'/'+ foundOrlost).push(JSON.parse(data));
-	// db.ref('Users/'+userid).update({foundOrlost:newPostKey});
 });
 
 
