@@ -78,27 +78,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["lat"]+"&lng="+data["lang"]+"&username=fetchfindbot";
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
-
-		if(islost===true){
-				//LOST 	
-				//Update lost items , Match items , Send status to bot
-				db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data);
-				initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
-
-			}
-			else{
-				//FOUND
-				//Update found items , Match items , Send status to bot
-				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
-				res.send("all ok");
-			}
-
-		});	
-
-});
-
-
-
+			
 function initiatematchingwithfound(countryCode, lostdata){
 	db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
 		console.log(snap.val());
@@ -132,6 +112,26 @@ function initiatematchingwithfound(countryCode, lostdata){
           res.send(items);
       });
   }
+		if(islost===true){
+				//LOST 	
+				//Update lost items , Match items , Send status to bot
+				db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data);
+				initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
+
+			}
+			else{
+				//FOUND
+				//Update found items , Match items , Send status to bot
+				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
+				res.send("all ok");
+			}
+
+		});	
+
+});
+
+
+
 
       function priceCheck(foundPrice,lostPrice){
       	var fp=foundPrice.split(' ')[1];
