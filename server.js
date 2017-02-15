@@ -84,6 +84,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 				//FOUND
 				//Update found items , Match items , Send status to bot
 				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
+				res.send("all ok");
 			}
 
 		});	
