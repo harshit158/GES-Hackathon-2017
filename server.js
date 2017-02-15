@@ -46,7 +46,7 @@ app.get('/Users/:userId', function(req, res) {
 
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
-	res.send('hiii '+JSON.parse(req.params.Itemdata));
+	// res.send('hiii '+JSON.parse(req.params.Itemdata));
 	var data = JSON.parse(req.params.Itemdata);
 	console.log(data);
 	var islost = data["islost"];
