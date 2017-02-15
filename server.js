@@ -45,7 +45,7 @@ app.get('/Users/:userId', function(req, res) {
 });
 
 
-app.get('/test/:q',function(req,res){
+app.get('/test/',function(req,res){
 	var xxx={
                   "islost":false,
                   "name":"Ashris",
@@ -58,7 +58,13 @@ app.get('/test/:q',function(req,res){
                   "lang":25.90
                };
 
-res.send("data pushed and you wrote "+req.params.q);
+db.ref('IN/passport/found').once('value',function(snap){
+	var ff=snap.val();
+				var dd= Object.keys(ff).map(function(key) {
+    return ff[key];
+});
+				res.send(dd);
+});
 });
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
@@ -91,9 +97,15 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 });
 
+
+
 function initiatematchingwithfound(countryCode, lostdata){
 	db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
-		var founditemsincountry = Object.values(snap.val());
+		console.log(snap.val());
+			var obj=snap.val();
+		var founditemsincountry = Object.keys(obj).map(function(key) {
+    return obj[key];
+});
 
 		var items=[];
 
