@@ -78,7 +78,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["lat"]+"&lng="+data["lang"]+"&username=fetchfindbot";
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
-			
+
 function initiatematchingwithfound(countryCode, lostdata){
 	db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
 		console.log(snap.val());
@@ -109,8 +109,9 @@ function initiatematchingwithfound(countryCode, lostdata){
           	}
           //all weapons deployed
           //ab goli maaro
-          res.send(items);
-      });
+          if(items.length==0)res.send("null");
+          else res.send(items);
+      	});
   }
 		if(islost===true){
 				//LOST 	
