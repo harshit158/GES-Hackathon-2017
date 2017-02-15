@@ -6,34 +6,6 @@ var najax = $ = require('najax')
 
 app.set('port', (process.env.PORT || 3000))
 
-/* Data LOST
-DATA={
-                  "islost":true,
-                  "name":event.senderobj.display,
-                  "userid":event.sender,
-                  "phone":context.simpledb.roomleveldata.phone,
-                  "itemtype":context.simpledb.roomleveldata.itemtype,
-                  "description":context.simpledb.roomleveldata.description,
-                  "reward":context.simpledb.roomleveldata.reward,
-                  "lat":context.simpledb.roomleveldata.lat,
-                  "lang":context.simpledb.roomleveldata.lang
-               };
-
-Data FOUND
-DATA={
-                  "islost":false,
-                  "name":event.senderobj.display,
-                  "userid":event.sender,
-                  "phone":context.simpledb.roomleveldata.phone,
-                  "itemtype":context.simpledb.roomleveldata.itemtype,
-                  "description":context.simpledb.roomleveldata.description,
-                  "foundimage":context.simpledb.roomleveldata.foundimage,
-                  "lat":context.simpledb.roomleveldata.lat,
-                  "lang":context.simpledb.roomleveldata.lang
-               };
-
-*/
-
 // Initializing firebase -----------------------
 
 var config = {
@@ -75,8 +47,6 @@ app.get('/Users/:userId', function(req, res) {
 
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
-	// var item = req.params.Itemdata.split('+')[0];
-	// var foundOrlost = JSON.parse(req.params.Itemdata.split('+')[2])["islost"];
 	var data = JSON.parse(req.params.Itemdata);
 	var islost = data["islost"];
 
@@ -87,31 +57,73 @@ app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
 		var countryCode=JSON.parse(result)["countryCode"];
 
 		if(islost===true){
+		//LOST 	
 		//Update lost items , Match items , Send status to bot
-		db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data)
+		db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data);
+		initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
+
 		}
 		else{
-			//Update found items , Match items , Send status to bot
-		db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data)	
+		//FOUND
+		//Update found items , Match items , Send status to bot
+		db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
+
 		}
 
 		});
 
-	//Pushing to individual items node as well as users
-	// var newPostKey=db.ref(item+'/'+ foundOrlost).push().key;
-	// var userid=data['userid'];
-	// var updates={};
 
-	// updates[item+'/'+ foundOrlost +'/'+newPostKey]=data;
+	var initiatematchingwithfound=function(countryCode, lostdata){
+	db.ref(countryCode+'/'+data["itemtype"]+'/found').once('value',function(snap){
+		var founditemsincountry = Object.values(snap.val());
+ 
+          var items=[];
+
+          for(var i=0;i<founditemsincountry.length;i++){
+          	var iteratedfounditem=founditemsincountry[i];
+          	var distance=calcCrow(iteratedfounditem,lostdata);
+          	if(distance<5 && priceCheck(iteratedfounditem.reward,lostdata.reward)===true){
+          			//prepare this item now
+          		var prepareditem={
+          			"title":"Match "+i+1,
+          			"subtitle":distance+" km away | Reward demanded: "+iteratedfounditem.reward,
+          			"imgurl":iteratedfounditem.foundimage,
+          			"options":[
+          			{
+          				"type":"text",
+          				"title":iteratedfounditem.userid+'#'+i
+          			}]
+          		};
+          		items.push(prepareditem);
+          	}	
+          }
+          //all weapons deployed
+          //ab goli maaro
+          res.send(items);
+      }
 	
-	// var jsonObject={}
-	// jsonObject[newPostKey]=foundOrlost;
-	// updates['Users/'+userid+'/'+ foundOrlost]=jsonObject;
+	function priceCheck(foundPrice,lostPrice){
+		var fp=foundPrice.split(' ')[1];
+		var lp=lostPrice.split(' ')[1];
+		return fp<=2*lp;
+	}
+	function calcCrow(data1,data2) 
+    {
+    	var lat1=Number(data1["lat"]);var lon1=Number(data1["lang"]);var lat2=Number(data2["lat"]);var lon2=Number(data2["lang"]);
+    	//lat1, lon1, lat2, lon2
+	    var R = 6371; // km
+	    var dLat = toRad(lat2-lat1);
+	    var dLon = toRad(lon2-lon1);
+	    var lat1 = toRad(lat1);
+	    var lat2 = toRad(lat2);
 
-	// db.ref().update(updates);
-
-});
-
+	    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+	      Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+	    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	    var d = R * c;
+	    return d.toFixed(2);
+	}
+}
 
 // Searching if a user has already submitted any preivious request
 app.get('/Users/search/:userId', function(req, res) {
@@ -125,7 +137,7 @@ app.get('/Users/search/:userId', function(req, res) {
 	});	
 });
 
-app.get('//search/:userId', function(req, res) {
+app.get('/search/:userId', function(req, res) {
 	var userToSearch=req.params.userId;
 	db.ref('Users/').once('value',function(snap){
 		var jsonObject = snap.val();
