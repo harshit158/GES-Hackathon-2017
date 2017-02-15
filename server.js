@@ -100,7 +100,7 @@ function initiatematchingwithfound(countryCode, lostdata){
           //all weapons deployed
           //ab goli maaro
           res.send(items);
-      }
+      });
   }
 
       function priceCheck(foundPrice,lostPrice){
