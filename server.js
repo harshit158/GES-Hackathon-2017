@@ -45,7 +45,7 @@ app.get('/Users/:userId', function(req, res) {
 });
 
 
-app.get('/test',function(req,res){
+app.get('/test/:q',function(req,res){
 	var xxx={
                   "islost":false,
                   "name":"Ashris",
@@ -58,11 +58,10 @@ app.get('/test',function(req,res){
                   "lang":25.90
                };
 
-db.ref('Test/').push(xxx);
-res.send('data pushed');
+res.send("data pushed and you wrote "+req.params.q);
 });
 // Updating the Items
-app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
+app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	// res.send('hiii '+JSON.parse(req.params.Itemdata));
 	var data = JSON.parse(req.params.Itemdata);
 	console.log(data);
