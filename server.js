@@ -2,9 +2,9 @@ var express = require('express');
 var	app = express();
 const firebase= require('firebase');
 
-var najax = $ = require('najax')
+var najax = $ = require('najax');
 
-app.set('port', (process.env.PORT || 3000))
+app.set('port', (process.env.PORT || 3000));
 
 // Initializing firebase -----------------------
 
@@ -16,13 +16,12 @@ var config = {
 
 firebase.database.enableLogging(true);
 firebase.initializeApp(config);
-var db = firebase.database()
+var db = firebase.database();
 
 // Routes ---------------------------------------
 // Checking the server
 app.get('/', function(req, res) {
 	res.send("Welcome to Fetchfind");
-	
 });
 
 // Getting the length of any node
@@ -47,6 +46,7 @@ app.get('/Users/:userId', function(req, res) {
 
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
+	res.send('hiii '+JSON.parse(req.params.Itemdata));
 	var data = JSON.parse(req.params.Itemdata);
 	console.log(data);
 	var islost = data["islost"];
@@ -126,6 +126,10 @@ function initiatematchingwithfound(countryCode, lostdata){
 	    var d = R * c;
 	    return d.toFixed(2);
 	}
+	 function toRad(Value) 
+    {
+        return Value * Math.PI / 180;
+    }
 
 // Searching if a user has already submitted any preivious request
 app.get('/Users/search/:userId', function(req, res) {
