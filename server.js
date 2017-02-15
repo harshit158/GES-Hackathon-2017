@@ -44,6 +44,23 @@ app.get('/Users/:userId', function(req, res) {
 	db.ref('Users/'+userid).update({Name:userName});
 });
 
+
+app.get('/test',function(req,res){
+	var xxx={
+                  "islost":false,
+                  "name":"Ashris",
+                  "userid":4545643,
+                  "phone":"9002311505",
+                  "itemtype":"demotype",
+                  "reward":"$ 500",
+                  "foundimage":"http://sampleimage.org",
+                  "lat":34.67,
+                  "lang":25.90
+               };
+
+db.ref('Test/').push(xxx);
+res.send('data pushed');
+});
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata', function(req, res) {
 	// res.send('hiii '+JSON.parse(req.params.Itemdata));
