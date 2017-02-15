@@ -98,6 +98,8 @@ function initiatematchingwithfound(countryCode, lostdata){
           				"title":"Match "+i+1,
           				"subtitle":distance+" km away | Reward demanded: "+iteratedfounditem.reward,
           				"imgurl":iteratedfounditem.foundimage,
+          				"name":iteratedfounditem.name,
+          				"phone":iteratedfounditem.phone,
           				"options":[
           				{
           					"type":"text",
