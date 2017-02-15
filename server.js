@@ -92,7 +92,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 });
 
 function initiatematchingwithfound(countryCode, lostdata){
-	db.ref(countryCode+'/'+data["itemtype"]+'/found').once('value',function(snap){
+	db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
 		var founditemsincountry = Object.values(snap.val());
 
 		var items=[];
