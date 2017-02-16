@@ -41,10 +41,18 @@ app.get('/getLength/:addressForLength', function(req, res) {
 
 app.get('/removefinder/:details',function(req,res){
 	var details=JSON.parse(req.params.details);
-	var dbRef=db.ref(details.countryCode+'/'+details.itemtype+"/found");
+	var dbRef=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/found");
+	var dbDeploy=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/matches");
 	dbRef.once("value",function(snap){
 		snap.forEach(function(v){
 			if(v.val().userid==details.finderID){
+				//match made in heaven
+				var matchitem={
+					"dateMatched":new Date().getTime(),
+					"finder":v.val(),
+					"owner":details.tempData
+				}
+				dbDeploy.push(matchitem);
 				dbRef.child(v.key).remove();
 				res.send("perfecto");
 			}
