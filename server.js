@@ -47,26 +47,29 @@ app.get('/Users/:userId', function(req, res) {
 
 
 app.get('/test/',function(req,res){
-	var xxx={
-                  "islost":false,
-                  "name":"Ashris",
-                  "userid":4545643,
-                  "phone":"9002311505",
-                  "itemtype":"demotype",
-                  "reward":"$ 500",
-                  "foundimage":"http://sampleimage.org",
-                  "lat":34.67,
-                  "lang":25.90
-               };
+// 	var xxx={
+//                   "islost":false,
+//                   "name":"Ashris",
+//                   "userid":4545643,
+//                   "phone":"9002311505",
+//                   "itemtype":"demotype",
+//                   "reward":"$ 500",
+//                   "foundimage":"http://sampleimage.org",
+//                   "lat":34.67,
+//                   "lang":25.90
+//                };
 
-db.ref('IN/passport/found').once('value',function(snap){
-	var ff=snap.val();
-				var dd= Object.keys(ff).map(function(key) {
-    return ff[key];
-});
+// db.ref('IN/passport/found').once('value',function(snap){
+// 	var ff=snap.val();
+// 				var dd= Object.keys(ff).map(function(key) {
+//     return ff[key];
+// });
 				res.send(dd);
+// });
 });
-});
+
+
+
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	// res.send('hiii '+JSON.parse(req.params.Itemdata));
@@ -79,21 +82,57 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["lat"]+"&lng="+data["lang"]+"&username=fetchfindbot";
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
+		//data.dateAdded=new Date();
+		if(islost===true){
+			//LOST 	
+			//Update lost items , Match items , Send status to bot
+			
+			db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data);
+			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
 
-function initiatematchingwithfound(countryCode, lostdata){
-	db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
-		console.log(snap.val());
-			var obj=snap.val();
-		var founditemsincountry = Object.keys(obj).map(function(key) {
-    return obj[key];
-});
+			}
+		else{
+				//FOUND
+				//Update found items , Match items , Send status to bot
+				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
+				res.send("all ok");
+			}
+
+			function initiatematchingwithfound(countryCode, lostdata){
+				db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
+					console.log(snap.val());
+						var obj=snap.val();
+					var founditemsincountry = Object.keys(obj).map(function(key) {
+			    return obj[key];
+			});
 
 		var items=[];
 
 		for(var i=0;i<founditemsincountry.length;i++){
 			var iteratedfounditem=founditemsincountry[i];
 			var distance=calcCrow(iteratedfounditem,lostdata);
+
 			if(distance<5 && priceCheck(iteratedfounditem.reward,lostdata.reward)===true){
+					var item=iteratedfounditem.itemtype;
+					if(item=="bank card" || item=="id card" || item=="passport"){
+						if(lostdata.uniquename==iteratedfounditem.uniquename){
+							var prepareditem={
+		          				"title":"Exact Match ",
+		          				"subtitle":distance+" km away | Reward demanded: "+iteratedfounditem.reward,
+		          				"imgurl":iteratedfounditem.foundimage,
+		          				"name":iteratedfounditem.name,
+		          				"phone":iteratedfounditem.phone,
+		          				"reward":iteratedfounditem.reward,
+		          				"options":[
+		          				{
+		          					"type":"text",
+		          					"title":iteratedfounditem.userid+'#0'
+		          				}]
+          					};
+							items=[prepareditem];
+							break;
+						}
+					}
           			//prepare this item now
           			var prepareditem={
           				"title":"Match "+i+1,
@@ -113,23 +152,12 @@ function initiatematchingwithfound(countryCode, lostdata){
           	}
           //all weapons deployed
           //ab goli maaro
-          if(items.length==0)res.send("null");
-          else res.send(items);
+          if(items.length==0)res.send("orange");
+          else res.send("blue");
+          // else res.send(items)
       	});
   }
-		if(islost===true){
-				//LOST 	
-				//Update lost items , Match items , Send status to bot
-				db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data);
-				initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
 
-			}
-			else{
-				//FOUND
-				//Update found items , Match items , Send status to bot
-				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
-				res.send("all ok");
-			}
 
 		});	
 
