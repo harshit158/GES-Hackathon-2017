@@ -38,36 +38,19 @@ app.get('/getLength/:addressForLength', function(req, res) {
 });
 
 // Adding new user to database
-app.get('/Users/:userId', function(req, res) {
-	var userid = req.params.userId.split('+')[0];
-	var userName = req.params.userId.split('+')[1];
-	db.ref('Users/'+userid).update({Name:userName});
-	res.send(sent);
+
+app.get('/removefinder/:details',function(req,res){
+	var details=JSON.parse(req.params.details);
+	var dbRef=db.ref(details.countryCode+'/'+details.itemtype+"/found");
+	dbRef.once("value",function(snap){
+		snap.forEach(function(v){
+			if(v.val().userid==details.finderID){
+				dbRef.child(v.key()).remove();
+				res.send("perfecto");
+			}
+		});
+	});
 });
-
-
-app.get('/test/',function(req,res){
-// 	var xxx={
-//                   "islost":false,
-//                   "name":"Ashris",
-//                   "userid":4545643,
-//                   "phone":"9002311505",
-//                   "itemtype":"demotype",
-//                   "reward":"$ 500",
-//                   "foundimage":"http://sampleimage.org",
-//                   "lat":34.67,
-//                   "lang":25.90
-//                };
-
-// db.ref('IN/passport/found').once('value',function(snap){
-// 	var ff=snap.val();
-// 				var dd= Object.keys(ff).map(function(key) {
-//     return ff[key];
-// });
-				res.send(dd);
-// });
-});
-
 
 
 // Updating the Items
