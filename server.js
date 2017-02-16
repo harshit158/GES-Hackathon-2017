@@ -82,7 +82,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["lat"]+"&lng="+data["lang"]+"&username=fetchfindbot";
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
-		//data.dateAdded=new Date();
+		data.dateAdded=new Date();
 		if(islost===true){
 			//LOST 	
 			//Update lost items , Match items , Send status to bot
