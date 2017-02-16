@@ -105,8 +105,10 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 					var obj=snap.val();
 					if(!obj){
-						res.end("null");
+						res.end("andhera kayam");
+						return;
 					}
+	else{
 					var founditemsincountry = Object.keys(obj).map(function(key) {
 
 			    			return obj[key];
@@ -154,11 +156,15 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 			          				}]
 			          			};
 			          			items.push(prepareditem);
-			          		}	
-			          	}
+			          		}	//if match
+			          	}//for loop
+
 			          //all weapons deployed
 			          //ab goli maaro
 			          res.send(items)
+
+
+			      } //else
 			      	});
 			  }
 
