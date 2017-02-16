@@ -102,8 +102,11 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 				console.log("I am called")
 				db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
 					console.log("The output is: ",snap.val());
-					return;
+
 					var obj=snap.val();
+					if(!obj){
+						res.end("null");
+					}
 					var founditemsincountry = Object.keys(obj).map(function(key) {
 
 			    			return obj[key];
@@ -155,9 +158,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 			          	}
 			          //all weapons deployed
 			          //ab goli maaro
-			          if(items.length==0)res.send("orange");
-			          else res.send("blue");
-			          // else res.send(items)
+			          res.send(items)
 			      	});
 			  }
 
