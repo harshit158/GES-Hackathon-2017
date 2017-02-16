@@ -100,6 +100,7 @@ function initiatematchingwithfound(countryCode, lostdata){
           				"imgurl":iteratedfounditem.foundimage,
           				"name":iteratedfounditem.name,
           				"phone":iteratedfounditem.phone,
+          				"reward":iteratedfounditem.reward,
           				"options":[
           				{
           					"type":"text",
