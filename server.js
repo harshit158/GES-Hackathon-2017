@@ -45,7 +45,7 @@ app.get('/removefinder/:details',function(req,res){
 	dbRef.once("value",function(snap){
 		snap.forEach(function(v){
 			if(v.val().userid==details.finderID){
-				dbRef.child(v.key()).remove();
+				dbRef.child(v.key).remove();
 				res.send("perfecto");
 			}
 		});
@@ -65,7 +65,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["lat"]+"&lng="+data["lang"]+"&username=fetchfindbot";
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
-		data.dateAdded=new Date();
+		data.dateAdded=new Date().getTime();
 		if(islost===true){
 			//LOST 	
 			//Update lost items , Match items , Send status to bot
