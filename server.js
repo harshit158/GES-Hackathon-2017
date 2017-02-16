@@ -99,64 +99,67 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 			}
 
 			function initiatematchingwithfound(countryCode, lostdata){
+				console.log("I am called")
 				db.ref(countryCode+'/'+lostdata["itemtype"]+'/found').once('value',function(snap){
-					console.log(snap.val());
-						var obj=snap.val();
+					console.log("The output is: ",snap.val());
+					return;
+					var obj=snap.val();
 					var founditemsincountry = Object.keys(obj).map(function(key) {
-			    return obj[key];
-			});
 
-		var items=[];
+			    			return obj[key];
+							});
 
-		for(var i=0;i<founditemsincountry.length;i++){
-			var iteratedfounditem=founditemsincountry[i];
-			var distance=calcCrow(iteratedfounditem,lostdata);
+					var items=[];
 
-			if(distance<5 && priceCheck(iteratedfounditem.reward,lostdata.reward)===true){
-					var item=iteratedfounditem.itemtype;
-					if(item=="bank card" || item=="id card" || item=="passport"){
-						if(lostdata.uniquename==iteratedfounditem.uniquename){
-							var prepareditem={
-		          				"title":"Exact Match ",
-		          				"subtitle":distance+" km away | Reward demanded: "+iteratedfounditem.reward,
-		          				"imgurl":iteratedfounditem.foundimage,
-		          				"name":iteratedfounditem.name,
-		          				"phone":iteratedfounditem.phone,
-		          				"reward":iteratedfounditem.reward,
-		          				"options":[
-		          				{
-		          					"type":"text",
-		          					"title":iteratedfounditem.userid+'#0'
-		          				}]
-          					};
-							items=[prepareditem];
-							break;
-						}
-					}
-          			//prepare this item now
-          			var prepareditem={
-          				"title":"Match "+i+1,
-          				"subtitle":distance+" km away | Reward demanded: "+iteratedfounditem.reward,
-          				"imgurl":iteratedfounditem.foundimage,
-          				"name":iteratedfounditem.name,
-          				"phone":iteratedfounditem.phone,
-          				"reward":iteratedfounditem.reward,
-          				"options":[
-          				{
-          					"type":"text",
-          					"title":iteratedfounditem.userid+'#'+i
-          				}]
-          			};
-          			items.push(prepareditem);
-          		}	
-          	}
-          //all weapons deployed
-          //ab goli maaro
-          if(items.length==0)res.send("orange");
-          else res.send("blue");
-          // else res.send(items)
-      	});
-  }
+					for(var i=0;i<founditemsincountry.length;i++){
+						var iteratedfounditem=founditemsincountry[i];
+						var distance=calcCrow(iteratedfounditem,lostdata);
+
+						if(distance<5 && priceCheck(iteratedfounditem.reward,lostdata.reward)===true){
+								var item=iteratedfounditem.itemtype;
+								if(item=="bank card" || item=="id card" || item=="passport"){
+									if(lostdata.uniquename==iteratedfounditem.uniquename){
+										var prepareditem={
+					          				"title":"Exact Match ",
+					          				"subtitle":distance+" km away | Reward demanded: "+iteratedfounditem.reward,
+					          				"imgurl":iteratedfounditem.foundimage,
+					          				"name":iteratedfounditem.name,
+					          				"phone":iteratedfounditem.phone,
+					          				"reward":iteratedfounditem.reward,
+					          				"options":[
+					          				{
+					          					"type":"text",
+					          					"title":iteratedfounditem.userid+'#0'
+					          				}]
+			          					};
+										items=[prepareditem];
+										break;
+									}
+								}
+			          			//prepare this item now
+			          			var prepareditem={
+			          				"title":"Match "+i+1,
+			          				"subtitle":distance+" km away | Reward demanded: "+iteratedfounditem.reward,
+			          				"imgurl":iteratedfounditem.foundimage,
+			          				"name":iteratedfounditem.name,
+			          				"phone":iteratedfounditem.phone,
+			          				"reward":iteratedfounditem.reward,
+			          				"options":[
+			          				{
+			          					"type":"text",
+			          					"title":iteratedfounditem.userid+'#'+i
+			          				}]
+			          			};
+			          			items.push(prepareditem);
+			          		}	
+			          	}
+			          //all weapons deployed
+			          //ab goli maaro
+			          if(items.length==0)res.send("orange");
+			          else res.send("blue");
+			          // else res.send(items)
+			      	});
+			  }
 
 
 		});	
