@@ -161,7 +161,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 			          //all weapons deployed
 			          //ab goli maaro
-			          res.end(items)
+			          res.send(items)
 			          return;
 
 
