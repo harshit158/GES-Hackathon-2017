@@ -21,7 +21,7 @@ var db = firebase.database();
 // Routes ---------------------------------------
 // Checking the server
 app.get('/', function(req, res) {
-	res.send("Welcome to Fetchfind");
+	res.send("Welcome to Fetchfind.");
 });
 
 // Getting the length of any node
@@ -42,6 +42,7 @@ app.get('/Users/:userId', function(req, res) {
 	var userid = req.params.userId.split('+')[0];
 	var userName = req.params.userId.split('+')[1];
 	db.ref('Users/'+userid).update({Name:userName});
+	res.send(sent);
 });
 
 
