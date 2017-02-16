@@ -86,8 +86,14 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 		if(islost===true){
 			//LOST 	
 			//Update lost items , Match items , Send status to bot
+			var dbRef=db.ref(countryCode+'/'+ data["itemtype"]+'/lost');
+			dbRef.once('value', function(snapshot) {
+			  if (!snapshot.hasChild(data)) {
+			    dbRef.push(data);
+			  }
+			});
 			
-			db.ref(countryCode+'/'+ data["itemtype"]+'/lost').push(data);
+			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
 
 			}
