@@ -5,6 +5,7 @@ const firebase= require('firebase');
 var najax = $ = require('najax');
 
 app.set('port', (process.env.PORT || 3000));
+// app.use(express.static(__dirname+'/Views/'));
 
 // Initializing firebase -----------------------
 
@@ -22,6 +23,10 @@ var db = firebase.database();
 // Checking the server
 app.get('/', function(req, res) {
 	res.send("Welcome to Fetchfind.");
+});
+
+app.get('/privacy', function(req, res) {
+	res.sendFile(__dirname+'/privacypolicy.htm');
 });
 
 // Getting the length of any node
