@@ -1,13 +1,25 @@
 var express = require('express');
-var	app = express();
-const firebase= require('firebase');
-
+var path = require('path');
 var najax = $ = require('najax');
+const firebase= require('firebase');
+var hbs=require('express-handlebars');
+var basicAuth = require('express-basic-auth');
+
+var	app = express();
+// var auth = basicAuth('testUser', 'testPass');
+
+
+
+// view engine setup------------------------------------------
+
+app.engine('hbs', hbs({extname:'hbs'}));
+app.set('views', path.join(__dirname,'views'));
+app.set('view engine', 'hbs');
 
 app.set('port', (process.env.PORT || 3000));
-// app.use(express.static(__dirname+'/Views/'));
+app.use(express.static(__dirname+'/views'));
 
-// Initializing firebase -----------------------
+// Initializing firebase ---------------------------------------
 
 var config = {
 	apiKey: "AIzaSyCUcgbm-0Yfhv1YF1UREO7iy8zZdoSNl5s",
@@ -19,30 +31,59 @@ firebase.database.enableLogging(true);
 firebase.initializeApp(config);
 var db = firebase.database();
 
-// Routes ---------------------------------------
-// Checking the server
+//--------------------------------------------------------------
+
 app.get('/', function(req, res) {
-	res.send("Welcome to Fetchfind.");
+	res.send("Welcome to Sparreo !");
 });
+
+//--------------------------------------------------------------
 
 app.get('/privacy', function(req, res) {
-	res.sendFile(__dirname+'/privacypolicy.htm');
+	res.sendFile(__dirname+'/views/privacypolicy.htm');
 });
 
-// Getting the length of any node
-app.get('/getLength/:addressForLength', function(req, res) {
-	var address = req.params.addressForLength;
-	address=address.split('+');
-	address=address.join('/')
-	db.ref(address).once('value',function(snap){
-		var jsonObject = snap.val();
-		var count=Object.keys(jsonObject).length;
-		// res.setHeader('Content-Type', 'application/json');
-		res.send({'Total number: ':count});
-	});	
+//--------------------------------------------------------------
+
+app.get('/getdate', function(req, res) {
+	var dateAndTime = calDate();
+	res.send(dateAndTime);
 });
 
-// Adding new user to database
+//--------------------------------------------------------------
+
+app.get('/admin', function(req, res) {
+	var lostData = {};
+	var foundData = {};
+	var matchesData = {};
+	var data = [];
+	db.ref('/').once('value',function(snap){
+		var obj=snap.val();
+		for( var country in obj){
+			for (var items in obj[country]){
+				for(var lostOrFound in obj[country][items]){
+					for(var finalObjects in obj[country][items][lostOrFound]){
+						var object=obj[country][items][lostOrFound][finalObjects];
+						var curr_data={};
+						curr_data['lang']=object.lang;
+						curr_data['lat']=object.lat;
+						curr_data['islost']=object.islost;
+						data.push(curr_data);
+
+					}
+				}
+					
+
+			}
+		}
+		res.render('adminHome',{dataVar:data});
+	});
+
+	// 
+});
+
+//--------------------------------------------------------------
+
 
 app.get('/removefinder/:details',function(req,res){
 	var details=JSON.parse(req.params.details);
@@ -53,7 +94,7 @@ app.get('/removefinder/:details',function(req,res){
 			if(v.val().userid==details.finderID){
 				//match made in heaven
 				var matchitem={
-					"dateMatched":new Date().getTime(),
+					"dateMatched": calDate(),
 					"finder":v.val(),
 					"owner":details.tempData
 				}
@@ -65,6 +106,8 @@ app.get('/removefinder/:details',function(req,res){
 	});
 });
 
+
+//--------------------------------------------------------------
 
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
@@ -78,15 +121,13 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	var locationpoocho='http://ws.geonames.org/countryCodeJSON?lat='+data["lat"]+"&lng="+data["lang"]+"&username=fetchfindbot";
 	$.get(locationpoocho,function(result){
 		var countryCode=JSON.parse(result)["countryCode"];
-		data.dateAdded=new Date().getTime();
+		data.dateAdded= calDate();
 		if(islost===true){
 			//LOST 	
 			//Update lost items , Match items , Send status to bot
 			var dbRef=db.ref(countryCode+'/'+ data["itemtype"]+'/lost');
 
 			  if (data.torf)dbRef.push(data);
-
-			
 			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
 
@@ -108,7 +149,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 						res.end("andhera kayam");
 						return;
 					}
-	else{
+					else{
 					var founditemsincountry = Object.keys(obj).map(function(key) {
 
 			    			return obj[key];
@@ -183,6 +224,40 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
       	return fp<=2*lp;
       }
 
+      function calDate(){
+
+  	    	var monthNames = ["January", "February", "March", "April", "May", "June",
+  			"July", "August", "September", "October", "November", "December"
+			];
+      	 	var currentTime = new Date();
+			var currentOffset = currentTime.getTimezoneOffset();
+			var ISTOffset = 330;   // IST offset UTC +5:30 
+			var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+			// ISTTime now represents the time in IST coordinates
+			var amOrpm="AM";
+			var hoursIST = ISTTime.getHours();
+			if(hoursIST>=12){
+				hoursIST=hoursIST-12;
+				amOrpm="PM";
+			}
+			if(hoursIST==0){
+				hoursIST=12;
+			}
+
+			hoursIST = hoursIST<10?"0"+hoursIST:hoursIST;
+
+
+			var minutesIST = ISTTime.getMinutes();
+			minutesIST = minutesIST<10?"0"+minutesIST:minutesIST;
+			var dateIST = ISTTime.getDate();
+			var monthIST = ISTTime.getMonth();
+			var yearIST = ISTTime.getYear()+1900;
+
+			var dateAndTime = dateIST+" "+monthNames[monthIST] +" "+yearIST+"; "+hoursIST+":"+minutesIST+" "+amOrpm;
+
+			return dateAndTime;
+      }
+
 
       function calcCrow(data1,data2){
       	var lat1=Number(data1["lat"]);var lon1=Number(data1["lang"]);var lat2=Number(data2["lat"]);var lon2=Number(data2["lang"]);
@@ -199,10 +274,15 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	    var d = R * c;
 	    return d.toFixed(2);
 	}
+
+
 	 function toRad(Value) 
     {
         return Value * Math.PI / 180;
     }
+
+
+//--------------------------------------------------------------
 
 // Searching if a user has already submitted any preivious request
 app.get('/Users/search/:userId', function(req, res) {
@@ -215,6 +295,9 @@ app.get('/Users/search/:userId', function(req, res) {
 		else res.send("no");
 	});	
 });
+
+
+//--------------------------------------------------------------
 
 app.get('/search/:userId', function(req, res) {
 	var userToSearch=req.params.userId;
