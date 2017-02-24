@@ -76,7 +76,7 @@ app.get('/admin', function(req, res) {
 
 			}
 		}
-		res.render('adminHome',{dataVar:data});
+		res.render('adminHome.hbs',{dataVar:data});
 	});
 
 	// 
@@ -227,8 +227,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
       function calDate(){
 
   	    	var monthNames = ["Jan", "Feb", "Mar", "April", "May", "June",
-  			"July", "Aug", "Sep", "Oct", "Nov", "Dec"
-			];
+  			"July", "Aug", "Sep", "Oct", "Nov", "Dec"];
       	 	var currentTime = new Date();
 			var currentOffset = currentTime.getTimezoneOffset();
 			var ISTOffset = 330;   // IST offset UTC +5:30 
