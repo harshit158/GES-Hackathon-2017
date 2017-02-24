@@ -57,6 +57,8 @@ app.get('/admin', function(req, res) {
 	var lostData = [];
 	var foundData = [];
 	var totalMatches = 0;
+	var lostReward = 0;
+	var foundReward = 0;
 	db.ref('/').once('value',function(snap){
 		var obj=snap.val();
 		for( var country in obj){//country="IN"
@@ -65,32 +67,41 @@ app.get('/admin', function(req, res) {
 
 				for(var lostOrFoundorMatches in obj[country][items]){//lostorfound = lost / found
 					if(lostOrFoundorMatches === "matches" ){
-						for(var object in obj[country][items][lostOrFoundorMatches])
-							totalMatches+=1;
-						// totalMatches += lostOrFoundorMatches.length;
-						// res.send("totalMatches in: "+items+" "+totalMatches);
-						continue;
+							for(var object in obj[country][items][lostOrFoundorMatches])
+								totalMatches+=1;
+							// totalMatches += lostOrFoundorMatches.length;
+							// res.send("totalMatches in: "+items+" "+totalMatches);
+							continue;
 					}
 
 					for(var finalObjects in obj[country][items][lostOrFoundorMatches]){//finalobjects = K3454HMjr etc
-						var object=obj[country][items][lostOrFoundorMatches][finalObjects];
-						var curr_data={};
-						curr_data['lang']=object.lang;
-						curr_data['lat']=object.lat;
-						curr_data['islost']=object.islost;
-						if(object.islost===true){
-							// res.send("this is lost")
-							lostData.push(curr_data);
-						}
-						else
-							foundData.push(curr_data)
+						
+							var object=obj[country][items][lostOrFoundorMatches][finalObjects];
+							var curr_data={};
+							curr_data['lang']=object.lang;
+							curr_data['lat']=object.lat;
+							curr_data['islost']=object.islost;
+
+							if(object.islost===true){
+								lostData.push(curr_data);
+								lostReward+=parseInt(object.reward.split(" ")[1]);
+							}
+							else{
+								foundData.push(curr_data);
+								foundReward+=parseInt(object.reward.split(" ")[1]);
+							}
+
 
 					}
 				}
 			}
 		}
 		// res.send("totalMatches :"+lostData.length);
-		res.render('adminHome',{lostData:lostData, foundData:foundData, totalMatches:totalMatches});
+		res.render('adminHome',{lostData:lostData, 
+								foundData:foundData, 
+								totalMatches:totalMatches,
+								lostReward:lostReward,
+								foundReward:foundReward});
 	});
 
 	// 

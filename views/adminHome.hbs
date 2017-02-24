@@ -18,9 +18,9 @@
     }
 
     #homeTable{
-    	background-color: #585c61;
+    	background-color: #323333;
     	float: right;
-    	color: white;
+    	color: #bbbbbb;
     	text-align: center;
     	width: 20%;
     	height: 650px;
@@ -31,19 +31,31 @@
 
     #values{
     	text-align: center;
-    	font-size: 13px;
+    	font-size: 8px;
     	margin-top: 100px;
+    	padding-top: 15px;
     }
 
     .eachValue{
     	width: auto;
     	height: 70px;
-
-
     }
 
     .eachValue p{
     	margin: 5px 0px;
+    	font-size: 0.9em
+    }
+
+    #rupees{
+    	font-size: 0.5em;
+    }
+
+    .footer{
+    	position: absolute;
+    	bottom: 0;
+    	text-align: center;
+    	width: 20%;
+    	font-size: 0.8em
     }
 
 </style>
@@ -55,12 +67,12 @@
 	<div id="lostData" style="display: none;">{{#each lostData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
 	<div id="foundData" style="display: none;">{{#each foundData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
 
-	<h1 style="color: #f4b324" >Sparreo</h1><hr>
+	<h1 style="color: #f4b324" >Sparreo <sup style="font-size: 0.4em">®</sup> </h1><hr>
 
-	<div id="values ">
+	<div id="values " style="padding-top: 15px">
 		<div class="eachValue">
 			<p>Number of Lost items</p>
-			<p id="total lost" style="font-size: 2em; color: #f73608"></p>	
+			<p id="total lost" style="font-size: 2em; color: #ff0b0b"></p>	
 		</div>
 		<div class="eachValue">
 			<p>Number of Found items</p>
@@ -68,14 +80,20 @@
 		</div>	
 		<div class="eachValue">
 			<p>Number of Matches</p>
-			<p id="total matches" style="font-size: 2em; color: #00f3f5">{{totalMatches}}</p>
+			<p id="total matches" style="font-size: 2em; color: white">{{totalMatches}}</p>
 		</div>
 		<div class="eachValue">
 			<p>Total reward offered by owners</p>
+			<p id="total matches" style="font-size: 1.5em; color: #f4b324; margin-top: 10px"><span id="rupees">Rs</span> {{lostReward}}</p>
 		</div>
 		<div class="eachValue">
-			<p>Total reward demanded by owners</p>
+			<p>Total reward demanded by finders</p>
+			<p id="total matches" style="font-size: 1.5em; color: #f4b324;margin-top: 10px"><span id="rupees">Rs</span> {{foundReward}}</p>
 		</div>
+		
+	</div>
+	<div class="footer" >
+		<p>© Sparreo 2017</p>
 	</div>
 </div>
 
