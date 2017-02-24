@@ -11,22 +11,25 @@
 
     #map {
     	position: absolute;
-        width: 75%;
-        height: 650px;
+        width: 100%;
+        height: 100%;
         margin: auto;
-        float: right;
+        float: left;
     }
 
     #homeTable{
-    	background-color: #323333;
+    	background-color: rgba(55, 89, 138, 0.8);
     	float: right;
-    	color: #bbbbbb;
+    	color: white;
     	text-align: center;
-    	width: 20%;
-    	height: 650px;
+    	width: 250px;
+    	height: 100%;
     	padding-left: 20px;
     	padding-right: 20px;
-    	margin-right: 10px; 
+    	margin-right: 10px;
+    	position: absolute;
+    	right: 25px;
+    	z-index: 10;
     }
 
     #values{
@@ -37,13 +40,16 @@
     }
 
     .eachValue{
+    	opacity: 1;
     	width: auto;
     	height: 70px;
+    	/*font-weight: bold;*/
     }
 
     .eachValue p{
+    	opacity: 1;
     	margin: 5px 0px;
-    	font-size: 0.9em
+    	font-size: 0.9em;
     }
 
     #rupees{
@@ -52,49 +58,52 @@
 
     .footer{
     	position: absolute;
-    	bottom: 0;
+    	right: 15;
+    	bottom: 10px;
     	text-align: center;
-    	width: 20%;
-    	font-size: 0.8em
+    	width: 250px;
+    	font-size: 0.8em;
     }
 
 </style>
 
+<div id="container">
+		<div id="map"> </div>
+		<div id="homeTable">
+			
+			<div id="lostData" style="display: none;">{{#each lostData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
+			<div id="foundData" style="display: none;">{{#each foundData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
 
-<div id="map"> </div>
-<div id="homeTable">
-	
-	<div id="lostData" style="display: none;">{{#each lostData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
-	<div id="foundData" style="display: none;">{{#each foundData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
+			<h1 style="color: #f4b324" >Sparreo <sup style="font-size: 0.4em">®</sup> </h1><hr>
 
-	<h1 style="color: #f4b324" >Sparreo <sup style="font-size: 0.4em">®</sup> </h1><hr>
+			<div id="values " style="padding-top: 15px">
+				<div class="eachValue">
+					<p>Number of Lost items</p>
+					<p id="total lost" style="font-size: 2em; color: #ff0b0b"></p>	
+				</div>
+				<div class="eachValue">
+					<p>Number of Found items</p>
+					<p id="total found" style="font-size: 2em; color: #00ff21"></p>
+				</div>	
+				<div class="eachValue">
+					<p>Number of Matches</p>
+					<p id="total matches" style="font-size: 2em; color: white">{{totalMatches}}</p>
+				</div>
+				<div class="eachValue">
+					<p>Total reward offered by owners</p>
+					<p id="total matches" style="font-size: 1.5em; color: #f4b324; margin-top: 10px"><span id="rupees">Rs</span> {{lostReward}}</p>
+				</div>
+				<div class="eachValue">
+					<p>Total reward demanded by finders</p>
+					<p id="total matches" style="font-size: 1.5em; color: #f4b324;margin-top: 10px"><span id="rupees">Rs</span> {{foundReward}}</p>
+				</div>
+				
+			</div>
+			<div class="footer" >
+				<p>© Sparreo 2017</p>
+			</div>
+		</div>
 
-	<div id="values " style="padding-top: 15px">
-		<div class="eachValue">
-			<p>Number of Lost items</p>
-			<p id="total lost" style="font-size: 2em; color: #ff0b0b"></p>	
-		</div>
-		<div class="eachValue">
-			<p>Number of Found items</p>
-			<p id="total found" style="font-size: 2em; color: #00ff21"></p>
-		</div>	
-		<div class="eachValue">
-			<p>Number of Matches</p>
-			<p id="total matches" style="font-size: 2em; color: white">{{totalMatches}}</p>
-		</div>
-		<div class="eachValue">
-			<p>Total reward offered by owners</p>
-			<p id="total matches" style="font-size: 1.5em; color: #f4b324; margin-top: 10px"><span id="rupees">Rs</span> {{lostReward}}</p>
-		</div>
-		<div class="eachValue">
-			<p>Total reward demanded by finders</p>
-			<p id="total matches" style="font-size: 1.5em; color: #f4b324;margin-top: 10px"><span id="rupees">Rs</span> {{foundReward}}</p>
-		</div>
-		
-	</div>
-	<div class="footer" >
-		<p>© Sparreo 2017</p>
-	</div>
 </div>
 
 
@@ -106,7 +115,88 @@
 			var mapOptions = {
 			    center: mylatlang,
 			    zoom: 16,
-			    mapTypeId: google.maps.MapTypeId.ROADMAP
+			    scrollwheel : false,
+			    styles: [
+		            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+		            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+		            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+		            {
+		              featureType: 'administrative.locality',
+		              elementType: 'labels.text.fill',
+		              stylers: [{color: '#d59563'}]
+		            },
+		            {
+		              featureType: 'poi',
+		              elementType: 'labels.text.fill',
+		              stylers: [{color: '#d59563'}]
+		            },
+		            {
+		              featureType: 'poi.park',
+		              elementType: 'geometry',
+		              stylers: [{color: '#263c3f'}]
+		            },
+		            {
+		              featureType: 'poi.park',
+		              elementType: 'labels.text.fill',
+		              stylers: [{color: '#6b9a76'}]
+		            },
+		            {
+		              featureType: 'road',
+		              elementType: 'geometry',
+		              stylers: [{color: '#38414e'}]
+		            },
+		            {
+		              featureType: 'road',
+		              elementType: 'geometry.stroke',
+		              stylers: [{color: '#212a37'}]
+		            },
+		            {
+		              featureType: 'road',
+		              elementType: 'labels.text.fill',
+		              stylers: [{color: '#9ca5b3'}]
+		            },
+		            {
+		              featureType: 'road.highway',
+		              elementType: 'geometry',
+		              stylers: [{color: '#746855'}]
+		            },
+		            {
+		              featureType: 'road.highway',
+		              elementType: 'geometry.stroke',
+		              stylers: [{color: '#1f2835'}]
+		            },
+		            {
+		              featureType: 'road.highway',
+		              elementType: 'labels.text.fill',
+		              stylers: [{color: '#f3d19c'}]
+		            },
+		            {
+		              featureType: 'transit',
+		              elementType: 'geometry',
+		              stylers: [{color: '#2f3948'}]
+		            },
+		            {
+		              featureType: 'transit.station',
+		              elementType: 'labels.text.fill',
+		              stylers: [{color: '#d59563'}]
+		            },
+		            {
+		              featureType: 'water',
+		              elementType: 'geometry',
+		              stylers: [{color: '#17263c'}]
+		            },
+		            {
+		              featureType: 'water',
+		              elementType: 'labels.text.fill',
+		              stylers: [{color: '#515c6d'}]
+		            },
+		            {
+		              featureType: 'water',
+		              elementType: 'labels.text.stroke',
+		              stylers: [{color: '#17263c'}]
+		            }
+		          ],
+			    // mapTypeId: google.maps.MapTypeId.ROADMAP
 			};
 			var map = new google.maps.Map(mapCanvas, mapOptions);
 
