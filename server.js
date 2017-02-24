@@ -5,6 +5,7 @@ const firebase= require('firebase');
 var hbs=require('express-handlebars');
 var basicAuth = require('express-basic-auth');
 
+
 var	app = express();
 // var auth = basicAuth('testUser', 'testPass');
 
