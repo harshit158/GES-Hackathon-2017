@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname,'views'));
 app.set('view engine', 'hbs');
 
 app.set('port', (process.env.PORT || 3000));
-app.use(express.static(__dirname+'/views'));
+app.use(express.static(path.join(__dirname,'views'));
 
 // Initializing firebase ---------------------------------------
 
@@ -40,7 +40,7 @@ app.get('/', function(req, res) {
 //--------------------------------------------------------------
 
 app.get('/privacy', function(req, res) {
-	res.sendFile(__dirname+'/views/privacypolicy');
+	res.sendFile(path.join(__dirname,'views/privacypolicy.htm'));
 });
 
 //--------------------------------------------------------------
