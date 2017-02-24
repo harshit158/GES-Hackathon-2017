@@ -226,8 +226,8 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
       function calDate(){
 
-  	    	var monthNames = ["January", "February", "March", "April", "May", "June",
-  			"July", "August", "September", "October", "November", "December"
+  	    	var monthNames = ["Jan", "Feb", "Mar", "April", "May", "June",
+  			"July", "Aug", "Sep", "Oct", "Nov", "Dec"
 			];
       	 	var currentTime = new Date();
 			var currentOffset = currentTime.getTimezoneOffset();
