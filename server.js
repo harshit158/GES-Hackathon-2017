@@ -40,7 +40,7 @@ app.get('/', function(req, res) {
 //--------------------------------------------------------------
 
 app.get('/privacy', function(req, res) {
-	res.sendFile(__dirname+'/views/privacypolicy.htm');
+	res.sendFile(__dirname+'/views/privacypolicy');
 });
 
 //--------------------------------------------------------------
