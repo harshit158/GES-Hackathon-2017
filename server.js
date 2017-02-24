@@ -76,7 +76,7 @@ app.get('/admin', function(req, res) {
 
 			}
 		}
-		res.render('adminHome.hbs',{dataVar:data});
+		res.render('adminHome',{dataVar:data});
 	});
 
 	// 
