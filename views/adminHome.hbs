@@ -51,20 +51,24 @@
 
 <div id="map"> </div>
 <div id="homeTable">
-	<i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i> 
-	<div id="dataFromServer" style="display: none;">{{#each dataVar}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
+	
+	<div id="lostData" style="display: none;">{{#each lostData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
+	<div id="foundData" style="display: none;">{{#each foundData}}<li >{{lat}},{{lang}},{{islost}}</li>{{/each}}</div>
+
 	<h1 style="color: #f4b324" >Sparreo</h1><hr>
 
 	<div id="values ">
 		<div class="eachValue">
 			<p>Number of Lost items</p>
-			<p id="lost items" style="font-size: 2em; color: #f4b324"></p>	
+			<p id="total lost" style="font-size: 2em; color: #f4b324"></p>	
 		</div>
 		<div class="eachValue">
 			<p>Number of Found items</p>
+			<p id="total found" style="font-size: 2em; color: #f4b324"></p>
 		</div>	
 		<div class="eachValue">
 			<p>Number of Matches</p>
+			<p id="total matches" style="font-size: 2em; color: #f4b324">{{totalMatches}}</p>
 		</div>
 		<div class="eachValue">
 			<p>Total reward offered by owners</p>
@@ -79,40 +83,47 @@
 <script >
 	$( window ).on("load",function() {
 
-	//lis is array of li elements
-	var lis = document.getElementById("dataFromServer").getElementsByTagName("li");
-	document.getElementById("lost items").innerHTML=lis.length;
-	
-	var mapCanvas = document.getElementById("map");
-	var mylatlang = new google.maps.LatLng(41.926536, 0.163609); 
-	var mapOptions = {
-	    center: mylatlang,
-	    zoom: 2,
-	    mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
-	var map = new google.maps.Map(mapCanvas, mapOptions);
+			var mapCanvas = document.getElementById("map");
+			var mylatlang = new google.maps.LatLng(22.316833, 87.307273); 
+			var mapOptions = {
+			    center: mylatlang,
+			    zoom: 16,
+			    mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var map = new google.maps.Map(mapCanvas, mapOptions);
 
-	//adding markers	
-	for(var i=0;i<lis.length;i++){
+			// iteration over lost ans found data
+			var type=["lost","found"];
+			for(var j in type){
+					var getId = (type[j]=="lost")?"lostData":"foundData";
+					var putId = (type[j]=="lost")?"total lost":"total found";
 
-		//parsing data from lis array
-		var lat=parseFloat(lis[i].innerHTML.split(",")[0]);
-		var lang=parseFloat(lis[i].innerHTML.split(",")[1]);
-		var islost=lis[i].innerHTML.split(",")[2];
+					var dataArray = document.getElementById(getId).getElementsByTagName("li");
+					document.getElementById(putId).innerHTML=dataArray.length;
+					
+					//adding markers	
+					for(var i=0;i<dataArray.length;i++){
 
-		var currLatLang= new google.maps.LatLng(lat, lang);
+						//parsing data from lostData array
+						var lat=parseFloat(dataArray[i].innerHTML.split(",")[0]);
+						var lang=parseFloat(dataArray[i].innerHTML.split(",")[1]);
+						var islost=dataArray[i].innerHTML.split(",")[2];
 
-		if(lis[i].innerHTML.split(",")[2]=="false")
-			var Icon='http://maps.google.com/mapfiles/ms/icons/green-dot.png';
-		else 
-			var Icon='http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-		var marker = new google.maps.Marker({
-		icon: Icon,
-	    position: currLatLang,
-	    map: map,
-	    title: islost
-	  	});
-	}
+						var currLatLang= new google.maps.LatLng(lat, lang);
+
+						if(islost==="false")
+							var Icon='http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+						else 
+							var Icon='http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+
+						var marker = new google.maps.Marker({
+							icon: Icon,
+						    position: currLatLang,
+						    map: map,
+						    title: islost
+					  	});
+					}
+			}
 	});
 
 </script>

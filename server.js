@@ -54,30 +54,43 @@ app.get('/getdate', function(req, res) {
 //--------------------------------------------------------------
 
 app.get('/admin', function(req, res) {
-	var lostData = {};
-	var foundData = {};
-	var matchesData = {};
-	var data = [];
+	var lostData = [];
+	var foundData = [];
+	var totalMatches = 0;
 	db.ref('/').once('value',function(snap){
 		var obj=snap.val();
-		for( var country in obj){
-			for (var items in obj[country]){
-				for(var lostOrFound in obj[country][items]){
-					for(var finalObjects in obj[country][items][lostOrFound]){
-						var object=obj[country][items][lostOrFound][finalObjects];
+		for( var country in obj){//country="IN"
+
+			for (var items in obj[country]){//items=keys
+
+				for(var lostOrFoundorMatches in obj[country][items]){//lostorfound = lost / found
+					if(lostOrFoundorMatches === "matches" ){
+						for(var object in obj[country][items][lostOrFoundorMatches])
+							totalMatches+=1;
+						// totalMatches += lostOrFoundorMatches.length;
+						// res.send("totalMatches in: "+items+" "+totalMatches);
+						continue;
+					}
+
+					for(var finalObjects in obj[country][items][lostOrFoundorMatches]){//finalobjects = K3454HMjr etc
+						var object=obj[country][items][lostOrFoundorMatches][finalObjects];
 						var curr_data={};
 						curr_data['lang']=object.lang;
 						curr_data['lat']=object.lat;
 						curr_data['islost']=object.islost;
-						data.push(curr_data);
+						if(object.islost===true){
+							// res.send("this is lost")
+							lostData.push(curr_data);
+						}
+						else
+							foundData.push(curr_data)
 
 					}
 				}
-					
-
 			}
 		}
-		res.render('adminHome',{dataVar:data});
+		// res.send("totalMatches :"+lostData.length);
+		res.render('adminHome',{lostData:lostData, foundData:foundData, totalMatches:totalMatches});
 	});
 
 	// 
