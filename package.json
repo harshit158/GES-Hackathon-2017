@@ -19,6 +19,7 @@
     "firebase": "~3.6.9",
     "morgan": "~1.8.0",
     "najax": "^1.0.1",
-    "razorpay": "^1.2.1"
+    "razorpay": "^1.2.1",
+    "socket.io": "^1.7.3"
   }
 }

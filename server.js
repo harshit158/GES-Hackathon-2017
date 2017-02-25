@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+var socket = require('socket.io');
 var najax = $ = require('najax');
 const firebase= require('firebase');
 var hbs=require('express-handlebars');
@@ -7,18 +8,24 @@ var basicAuth = require('express-basic-auth');
 
 
 var	app = express();
-// var auth = basicAuth('testUser', 'testPass');
-
-
 
 // view engine setup------------------------------------------
-
 app.engine('hbs', hbs({extname:'hbs'}));
 app.set('views', path.join(__dirname,'views'));
 app.set('view engine', 'hbs');
 
+// -----------------------------------------------------------
 app.set('port', (process.env.PORT || 3000));
-// app.use(express.static(path.join(__dirname,'views')));
+var server=app.listen(process.env.PORT || 3000); 
+
+console.log("Node app is running at localhost:" + app.get('port'));
+var time=new Date().getTime();
+io = socket(server);
+// io.sockets.on('connection', newConnection);
+// io.sockets.on('connection', newConnection);
+// function newConnection(socket){
+// 	io.sockets.emit('message', time);
+// } 
 
 // Initializing firebase ---------------------------------------
 
@@ -35,6 +42,9 @@ var db = firebase.database();
 //--------------------------------------------------------------
 
 app.get('/', function(req, res) {
+	io.sockets.on('connection', newConnection);
+	var time=new Date().getTime();
+	function newConnection(socket) {io.sockets.emit('message',time);}
 	res.send("Welcome to Sparreo !");
 });
 
@@ -53,7 +63,7 @@ app.get('/getdate', function(req, res) {
 
 //--------------------------------------------------------------
 
-app.get('/admin', function(req, res) {
+app.get('/dashboard', function(req, res) {
 	var lostData = [];
 	var foundData = [];
 	var totalMatches = 0;
@@ -69,8 +79,6 @@ app.get('/admin', function(req, res) {
 					if(lostOrFoundorMatches === "matches" ){
 							for(var object in obj[country][items][lostOrFoundorMatches])
 								totalMatches+=1;
-							// totalMatches += lostOrFoundorMatches.length;
-							// res.send("totalMatches in: "+items+" "+totalMatches);
 							continue;
 					}
 
@@ -96,15 +104,13 @@ app.get('/admin', function(req, res) {
 				}
 			}
 		}
-		// res.send("totalMatches :"+lostData.length);
-		res.render('adminHome',{lostData:lostData, 
+		
+		res.render('dashboard',{lostData:lostData, 
 								foundData:foundData, 
 								totalMatches:totalMatches,
 								lostReward:lostReward,
 								foundReward:foundReward});
 	});
-
-	// 
 });
 
 //--------------------------------------------------------------
@@ -237,6 +243,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 
 		});	
+		
 
 });
 
@@ -299,6 +306,10 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	    return d.toFixed(2);
 	}
 
+	function sendSocket(){
+
+	}
+
 
 	 function toRad(Value) 
     {
@@ -337,6 +348,3 @@ app.get('/search/:userId', function(req, res) {
 
 
 // start the server
-app.listen(app.get('port'), function() {
-	console.log("Node app is running at localhost:" + app.get('port'));
-})
