@@ -44,6 +44,7 @@ app.get('/', function(req, res) {
 	// var time=new Date().getTime();
 	// var io = app.get('socketio');
 	// io.sockets.emit('message',time);
+	console.log("Sent data from home");
 	var data = dataForDashboard();
 	res.send(data);
 });
@@ -374,6 +375,8 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 						totalMatches:totalMatches,
 						lostReward:lostReward,
 						foundReward:foundReward};
+			var io = app.get('socketio');
+			io.sockets.emit('inside function','inside function');
 			return data;
 		});
 	}
