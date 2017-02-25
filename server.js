@@ -44,7 +44,8 @@ app.get('/', function(req, res) {
 	// var time=new Date().getTime();
 	// var io = app.get('socketio');
 	// io.sockets.emit('message',time);
-	res.send("Welcome to Sparreo !");
+	var data = dataForDashboard();
+	res.send(data);
 });
 
 //--------------------------------------------------------------
