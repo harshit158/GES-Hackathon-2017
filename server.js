@@ -45,8 +45,8 @@ app.get('/', function(req, res) {
 	// var io = app.get('socketio');
 	// io.sockets.emit('message',time);
 	console.log("Sent data from home");
-	var data = dataForDashboard();
-	res.send(data);
+	
+	res.send('Welcome to Sparrio');
 });
 
 //--------------------------------------------------------------
@@ -136,8 +136,7 @@ app.get('/removefinder/:details',function(req,res){
 				dbRef.child(v.key).remove();
 
 				//-----------------socket-io
-				var entireData=dataForDashboard();
-				io.sockets.emit('entireData',entireData);
+				dataForDashboard();
 				//-----------------socket-io
 				
 				res.send("perfecto");
@@ -172,8 +171,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 			  if (data.torf){
 			  	dbRef.push(data);
-			  	var entireData=dataForDashboard();
-				io.sockets.emit('entireData',entireData);
+			  	dataForDashboard();
 			  }
 			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
@@ -185,8 +183,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
 
 				//-----------------socket-io
-				var entireData=dataForDashboard();
-				io.sockets.emit('entireData',entireData);
+				dataForDashboard();
 				//-----------------socket-io
 				
 				res.send("all ok");
@@ -369,15 +366,13 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 					}
 				}
 			}
-			
-			var data = {lostData:lostData, 
-						foundData:foundData, 
-						totalMatches:totalMatches,
-						lostReward:lostReward,
-						foundReward:foundReward};
 			var io = app.get('socketio');
-			io.sockets.emit('inside function','inside function');
-			return data;
+			io.sockets.emit('from dataForDashboard()',{lostData:lostData, 
+													foundData:foundData, 
+													totalMatches:totalMatches,
+													lostReward:lostReward,
+													foundReward:foundReward})
+			// return data;
 		});
 	}
 
