@@ -123,12 +123,17 @@
 		document.getElementById("total matches").innerHTML=data.totalMatches;
 	});
 
-	socket.on('from_dataForDashboard', function(data){
+	socket.on("lost", function(data){
 		var data = JSON.parse(data);
 		document.getElementById("lost reward").innerHTML=data.lostReward;
-		document.getElementById("found reward").innerHTML=data.foundReward;
-		document.getElementById("total matches").innerHTML=data.totalMatches;
 	});
+
+	socket.on("found", function(data){
+		var data = JSON.parse(data);
+		document.getElementById("found reward").innerHTML=data.foundReward;
+	});
+
+
 
 </script>
 

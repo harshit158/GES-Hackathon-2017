@@ -122,6 +122,7 @@ app.get('/dashboard', function(req, res) {
 app.get('/removefinder/:details',function(req,res){
 	//for socket io connection
 	var io = app.get('socketio');
+	var source = "";
 	var details=JSON.parse(req.params.details);
 	var dbRef=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/found");
 	var dbDeploy=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/matches");
@@ -138,7 +139,8 @@ app.get('/removefinder/:details',function(req,res){
 				dbRef.child(v.key).remove();
 
 				//-----------------socket-io
-				dataForDashboard();
+				source = "remove_finder";
+				dataForDashboard(source);
 				//-----------------socket-io
 				
 				res.send("perfecto");
@@ -153,9 +155,11 @@ app.get('/removefinder/:details',function(req,res){
 
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
-	//for socket io connection
+	//--------------------------socket io
 	var io = app.get('socketio');
 	io.sockets.emit('start','inside of sendprocessretrieve');
+	var source = "";
+	//--------------------------socket io
 	var data = JSON.parse(req.params.Itemdata);
 	console.log(data);
 	var islost = data["islost"];
@@ -173,7 +177,8 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 			  if (data.torf){
 			  	dbRef.push(data);
-			  	dataForDashboard();
+			  	source = "lost";
+			  	dataForDashboard(source);
 			  }
 			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
@@ -185,7 +190,8 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
 
 				//-----------------socket-io
-				dataForDashboard();
+				source = "found";
+				dataForDashboard(source);
 				//-----------------socket-io
 				
 				res.send("all ok");
@@ -327,7 +333,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	    return d.toFixed(2);
 	}
 
-	function dataForDashboard(){
+	function dataForDashboard(source){
 		var db = firebase.database();
 		var lostData = [];
 		var foundData = [];
@@ -375,10 +381,9 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 					"totalMatches":totalMatches,
 					"lostReward":lostReward,
 					"foundReward":foundReward};
-
-			data = JSON.stringify(data);
+			data = JSON.stringify(data); 			
 			var io = app.get('socketio');
-			io.sockets.emit('from_dataForDashboard',data);
+			io.sockets.emit(source,data);
 			
 
 			console.log("here is the data :\n"+ data);
