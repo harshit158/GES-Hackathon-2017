@@ -124,7 +124,6 @@
 	});
 
 	socket.on('from_dataForDashboard', function(data){
-		data = JSON.parse(data);
 		document.getElementById("lost reward").innerHTML=data.lostReward;
 		document.getElementById("found reward").innerHTML=data.foundReward;
 		document.getElementById("total matches").innerHTML=data.totalMatches;
