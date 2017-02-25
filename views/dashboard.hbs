@@ -117,7 +117,7 @@
 	// 	document.getElementById("title").innerHTML=data;
 	// });
 
-	socket.on('entireData', function(data){
+	socket.on('dataForDashboard', function(data){
 		var data = JSON.parse(data);
 		document.getElementById("total lost").innerHTML=data.lostData.length;
 		document.getElementById("total found").innerHTML=data.foundData.length;

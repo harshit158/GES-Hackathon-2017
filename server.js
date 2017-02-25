@@ -138,6 +138,7 @@ app.get('/removefinder/:details',function(req,res){
 				dbRef.child(v.key).remove();
 
 				//-----------------socket-io
+				//emit message to client to refresh values on website
 				dataForDashboard();
 				//-----------------socket-io
 				
