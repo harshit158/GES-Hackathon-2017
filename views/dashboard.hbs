@@ -238,13 +238,13 @@
 						console.log(dataArray);
 						for(var i=0;i<dataArray.length;i++){
 
-								var lat= JSON.parse(dataArray[i]).lat;
+								var lat= parseFloat(dataArray[i]).lat;
 								var lang=parseFloat(dataArray[i].lang);
-								var islost=parseFloat(dataArray[i].islost);
+								var islost=dataArray[i].islost;
 
 								var currLatLang= new google.maps.LatLng(lat, lang);
 
-								if(islost==="false")
+								if(islost===false)
 									var Icon='http://maps.google.com/mapfiles/ms/icons/green-dot.png';
 								else 
 									var Icon='http://maps.google.com/mapfiles/ms/icons/red-dot.png';
