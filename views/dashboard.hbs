@@ -249,11 +249,12 @@
 				document.getElementById("found reward").innerHTML=data.foundReward;
 				document.getElementById("total matches").innerHTML=data.totalMatches;
 
-				plot_markers();
+				plot_markers(lostDataArray,foundDataArray);
 			});
 			//--------------------------------------
 
-			function plot_markers(){
+			function plot_markers(lostDataArray, foundDataArray){
+				
 				var arrays=[lostDataArray,foundDataArray];
 				for(var j in arrays){
 						var dataArray = arrays[j];
