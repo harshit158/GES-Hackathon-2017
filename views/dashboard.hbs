@@ -113,10 +113,15 @@
 	var socket;
 	// socket = io.connect('http://localhost:3000');
 	socket = io.connect('www.sparreo.com');
-	socket.on('message', newData);
-	function newData(data){
-		document.getElementById("total matches").innerHTML=data;
-	}
+	socket.on('start', function(data){
+		document.getElementById("title").innerHTML=data;
+	});
+
+	socket.on('entireData', function(data){
+		document.getElementById("lost reward").innerHTML=data.lostReward;
+		document.getElementById("found reward").innerHTML=data.foundReward;
+		document.getElementById("total matches").innerHTML=data.totalMatches;
+	});
 
 </script>
 

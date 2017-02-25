@@ -152,6 +152,7 @@ app.get('/removefinder/:details',function(req,res){
 app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	//for socket io connection
 	var io = app.get('socketio');
+	io.sockets.emit('start','inside of sendprocessretrieve');
 	var data = JSON.parse(req.params.Itemdata);
 	console.log(data);
 	var islost = data["islost"];
@@ -170,7 +171,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 			  if (data.torf){
 			  	dbRef.push(data);
 			  	var entireData=dataForDashboard();
-				io.sockets.emit('message',"send process is called");
+				io.sockets.emit('entireData',entireData);
 			  }
 			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
@@ -183,7 +184,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 				//-----------------socket-io
 				var entireData=dataForDashboard();
-				io.sockets.emit('message',"send process is called");
+				io.sockets.emit('entireData',entireData);
 				//-----------------socket-io
 				
 				res.send("all ok");
