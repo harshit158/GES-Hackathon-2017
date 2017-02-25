@@ -94,11 +94,11 @@
 				</div>
 				<div class="eachValue">
 					<p>Total reward offered by owners</p>
-					<p id="lost reward" style="font-size: 1.5em; color: #f4b324; margin-top: 10px"><span id="rupees">Rs</span> {{lostReward}}</p>
+					<p  style="font-size: 1.5em; color: #f4b324; margin-top: 10px"><span id="rupees">Rs</span><span id="lost reward">{{lostReward}}</span> </p>
 				</div>
 				<div class="eachValue">
 					<p>Total reward demanded by finders</p>
-					<p id="found reward" style="font-size: 1.5em; color: #f4b324;margin-top: 10px"><span id="rupees">Rs</span> {{foundReward}}</p>
+					<p  style="font-size: 1.5em; color: #f4b324;margin-top: 10px"><span id="rupees">Rs</span><span id="found reward">{{foundReward}}</span> </p>
 				</div>
 				
 			</div>
@@ -109,35 +109,10 @@
 
 </div>
 
-<!-- <script type="text/javascript">
-	var socket;
-	var lostDataArray;
-	var foundDataArray;
-	// socket = io.connect('http://localhost:3000');
-	socket = io.connect('www.sparreo.com');
-	// socket.on('start', function(data){
-	// 	document.getElementById("title").innerHTML=data;
-	// });
 
-	socket.on('dataForDashboard', function(data){
-		var data = JSON.parse(data);
-		lostDataArray = data.lostData;
-		foundDataArray = data.foundData;
-		document.getElementById("total lost").innerHTML=data.lostData.length;
-		document.getElementById("total found").innerHTML=data.foundData.length;
-		document.getElementById("lost reward").innerHTML=data.lostReward;
-		document.getElementById("found reward").innerHTML=data.foundReward;
-		document.getElementById("total matches").innerHTML=data.totalMatches;
-	});
-
-</script> -->
 
 <script >
 	$( window ).on("load",function() {
-
-			var check = true; 
-			//true: markers are plotted when WEBSITE is loaded
-			//false: markers are plotted through SOCKET-IO
 
 			//-------------------------------------
 			//Initializing Map
@@ -249,12 +224,13 @@
 				document.getElementById("found reward").innerHTML=data.foundReward;
 				document.getElementById("total matches").innerHTML=data.totalMatches;
 
+
 				plot_markers(lostDataArray,foundDataArray);
 			});
 			//--------------------------------------
 
 			function plot_markers(lostDataArray, foundDataArray){
-				
+
 				var arrays=[lostDataArray,foundDataArray];
 				for(var j in arrays){
 						var dataArray = arrays[j];
@@ -262,6 +238,7 @@
 						for(var i=0;i<dataArray.length;i++){
 
 								var lat= JSON.parse(dataArray[i]).lat;
+								alert("the lat is: "+ lat);
 								var lang=JSON.parse(dataArray[i]).lang;
 								var islost=JSON.parse(dataArray[i]).islost;
 
