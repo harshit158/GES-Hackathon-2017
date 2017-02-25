@@ -116,6 +116,8 @@ app.get('/dashboard', function(req, res) {
 
 
 app.get('/removefinder/:details',function(req,res){
+	//for socket io connection
+	var io = app.get('socketio');
 	var details=JSON.parse(req.params.details);
 	var dbRef=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/found");
 	var dbDeploy=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/matches");
@@ -130,6 +132,10 @@ app.get('/removefinder/:details',function(req,res){
 				}
 				dbDeploy.push(matchitem);
 				dbRef.child(v.key).remove();
+				//-----------------socket-io
+				var entireData=dataForDashboard();
+				io.sockets.emit('entireData',entireData);
+				//-----------------socket-io
 				res.send("perfecto");
 			}
 		});
