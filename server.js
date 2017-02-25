@@ -122,7 +122,6 @@ app.get('/dashboard', function(req, res) {
 app.get('/removefinder/:details',function(req,res){
 	//for socket io connection
 	var io = app.get('socketio');
-	var source = "";
 	var details=JSON.parse(req.params.details);
 	var dbRef=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/found");
 	var dbDeploy=db.ref(details.countryCode+'/'+details.tempData.itemtype+"/matches");
@@ -139,8 +138,7 @@ app.get('/removefinder/:details',function(req,res){
 				dbRef.child(v.key).remove();
 
 				//-----------------socket-io
-				source = "remove_finder";
-				dataForDashboard(source);
+				dataForDashboard();
 				//-----------------socket-io
 				
 				res.send("perfecto");
@@ -158,7 +156,6 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	//--------------------------socket io
 	var io = app.get('socketio');
 	io.sockets.emit('start','inside of sendprocessretrieve');
-	var source = "";
 	//--------------------------socket io
 	var data = JSON.parse(req.params.Itemdata);
 	console.log(data);
@@ -177,8 +174,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 			  if (data.torf){
 			  	dbRef.push(data);
-			  	source = "lost";
-			  	dataForDashboard(source);
+			  	dataForDashboard();
 			  }
 			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
@@ -190,8 +186,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
 
 				//-----------------socket-io
-				source = "found";
-				dataForDashboard(source);
+				dataForDashboard();
 				//-----------------socket-io
 				
 				res.send("all ok");
@@ -333,7 +328,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	    return d.toFixed(2);
 	}
 
-	function dataForDashboard(source){
+	function dataForDashboard(){
 		var db = firebase.database();
 		var lostData = [];
 		var foundData = [];
@@ -383,7 +378,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 					"foundReward":foundReward};
 			data = JSON.stringify(data); 			
 			var io = app.get('socketio');
-			io.sockets.emit(source,data);
+			io.sockets.emit("dataForDashboard",data);
 			
 
 			console.log("here is the data :\n"+ data);
