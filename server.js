@@ -142,7 +142,8 @@ app.get('/removefinder/:details',function(req,res){
 
 // Updating the Items
 app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
-	// res.send('hiii '+JSON.parse(req.params.Itemdata));
+	//for socket io connection
+	var io = app.get('socketio');
 	var data = JSON.parse(req.params.Itemdata);
 	console.log(data);
 	var islost = data["islost"];
@@ -158,7 +159,11 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 			//Update lost items , Match items , Send status to bot
 			var dbRef=db.ref(countryCode+'/'+ data["itemtype"]+'/lost');
 
-			  if (data.torf)dbRef.push(data);
+			  if (data.torf){
+			  	dbRef.push(data);
+			  	var entireData=dataForDashboard();
+				io.sockets.emit('entireData',entireData);
+			  }
 			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
 
@@ -167,6 +172,10 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 				//FOUND
 				//Update found items , Match items , Send status to bot
 				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
+				//-----------------socket-io
+				var entireData=dataForDashboard();
+				io.sockets.emit('entireData',entireData);
+				//-----------------socket-io
 				res.send("all ok");
 			}
 
@@ -243,9 +252,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 
 		});	
-		var entireData=dataForDashboard();
-		var io = app.get('socketio');
-		io.sockets.emit('entireData',entireData);
+		
 
 });
 
