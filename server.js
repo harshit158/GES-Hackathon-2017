@@ -21,7 +21,8 @@ var server=app.listen(process.env.PORT || 3000);
 console.log("Node app is running at localhost:" + app.get('port'));
 var time=new Date().getTime();
 io = socket(server);
-// io.sockets.on('connection', newConnection);
+io.sockets.on('connection', newConnection);
+newConnection = function(socket){io.sockets.emit('message',time);}
 // io.sockets.on('connection', newConnection);
 // function newConnection(socket){
 // 	io.sockets.emit('message', time);
@@ -42,9 +43,7 @@ var db = firebase.database();
 //--------------------------------------------------------------
 
 app.get('/', function(req, res) {
-	io.sockets.on('connection', newConnection);
-	var time=new Date().getTime();
-	function newConnection(socket) {io.sockets.emit('message',time);}
+	newConnection();
 	res.send("Welcome to Sparreo !");
 });
 
