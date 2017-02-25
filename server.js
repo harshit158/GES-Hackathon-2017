@@ -45,8 +45,10 @@ app.get('/', function(req, res) {
 	// var io = app.get('socketio');
 	// io.sockets.emit('message',time);
 	console.log("Sent data from home");
-	
-	res.send('Welcome to Sparrio');
+	// var data = dataForDashboard();
+	// var stringify = JSON.stringify(data);
+	// data = JSON.parse(stringify);
+	res.send('Welcome to Sparrio :');
 });
 
 //--------------------------------------------------------------
@@ -326,11 +328,13 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	}
 
 	function dataForDashboard(){
+		var db = firebase.database();
 		var lostData = [];
 		var foundData = [];
 		var totalMatches = 0;
 		var lostReward = 0;
 		var foundReward = 0;
+
 		db.ref('/').once('value',function(snap){
 			var obj=snap.val();
 			for( var country in obj){//country="IN"
@@ -366,13 +370,19 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 					}
 				}
 			}
+			var data={"lostData":lostData, 
+					"foundData":foundData, 
+					"totalMatches":totalMatches,
+					"lostReward":lostReward,
+					"foundReward":foundReward};
+
+			data = JSON.stringify(data);
 			var io = app.get('socketio');
-			io.sockets.emit('from dataForDashboard()',{lostData:lostData, 
-													foundData:foundData, 
-													totalMatches:totalMatches,
-													lostReward:lostReward,
-													foundReward:foundReward})
-			// return data;
+			io.sockets.emit('from_dataForDashboard',data);
+			
+
+			console.log("here is the data :\n"+ data);
+			// return (data);
 		});
 	}
 
