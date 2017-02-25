@@ -24,10 +24,7 @@ io = socket(server);
 app.set('socketio', io);
 io.sockets.on('connection', newConnection);
 function newConnection(socket){io.sockets.emit('message',time);}
-// io.sockets.on('connection', newConnection);
-// function newConnection(socket){
-// 	io.sockets.emit('message', time);
-// } 
+
 
 // Initializing firebase ---------------------------------------
 
@@ -137,6 +134,7 @@ app.get('/removefinder/:details',function(req,res){
 			}
 		});
 	});
+
 });
 
 
@@ -245,7 +243,9 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 
 
 		});	
-		
+		var entireData=dataForDashboard();
+		var io = app.get('socketio');
+		io.sockets.emit('entireData',entireData);
 
 });
 
@@ -308,8 +308,55 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 	    return d.toFixed(2);
 	}
 
-	function sendSocket(){
+	function dataForDashboard(){
+		var lostData = [];
+		var foundData = [];
+		var totalMatches = 0;
+		var lostReward = 0;
+		var foundReward = 0;
+		db.ref('/').once('value',function(snap){
+			var obj=snap.val();
+			for( var country in obj){//country="IN"
 
+				for (var items in obj[country]){//items=keys
+
+					for(var lostOrFoundorMatches in obj[country][items]){//lostorfound = lost / found
+						if(lostOrFoundorMatches === "matches" ){
+								for(var object in obj[country][items][lostOrFoundorMatches])
+									totalMatches+=1;
+								continue;
+						}
+
+						for(var finalObjects in obj[country][items][lostOrFoundorMatches]){//finalobjects = K3454HMjr etc
+							
+								var object=obj[country][items][lostOrFoundorMatches][finalObjects];
+								var curr_data={};
+								curr_data['lang']=object.lang;
+								curr_data['lat']=object.lat;
+								curr_data['islost']=object.islost;
+
+								if(object.islost===true){
+									lostData.push(curr_data);
+									lostReward+=parseInt(object.reward.split(" ")[1]);
+								}
+								else{
+									foundData.push(curr_data);
+									foundReward+=parseInt(object.reward.split(" ")[1]);
+								}
+
+
+						}
+					}
+				}
+			}
+			
+			var data = {lostData:lostData, 
+						foundData:foundData, 
+						totalMatches:totalMatches,
+						lostReward:lostReward,
+						foundReward:foundReward};
+			return data;
+		});
 	}
 
 
@@ -318,35 +365,3 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
         return Value * Math.PI / 180;
     }
 
-
-//--------------------------------------------------------------
-
-// Searching if a user has already submitted any preivious request
-app.get('/Users/search/:userId', function(req, res) {
-	var userToSearch=req.params.userId;
-	db.ref('Users/').once('value',function(snap){
-		var jsonObject = snap.val();
-		if(jsonObject.hasOwnProperty(userToSearch)){
-			res.send("yes");
-		}		
-		else res.send("no");
-	});	
-});
-
-
-//--------------------------------------------------------------
-
-app.get('/search/:userId', function(req, res) {
-	var userToSearch=req.params.userId;
-	db.ref('Users/').once('value',function(snap){
-		var jsonObject = snap.val();
-		if(jsonObject.hasOwnProperty(userToSearch)){
-			res.send("yes");
-		}		
-		else res.send("no");
-	});	
-});
-
-
-
-// start the server

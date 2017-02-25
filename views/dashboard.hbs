@@ -113,11 +113,9 @@
 	var socket;
 	// socket = io.connect('http://localhost:3000');
 	socket = io.connect('www.sparreo.com');
-	var data={name:"harshit"};
-	// socket.emit('mouse',data); 
-	socket.on('message', newData);
+	socket.on('entireData', newData);
 	function newData(data){
-		document.getElementById("title").innerHTML=data;
+		document.getElementById("total matches").innerHTML=data.totalMatches;
 	}
 
 </script>
