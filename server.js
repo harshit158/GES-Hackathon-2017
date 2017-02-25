@@ -132,10 +132,12 @@ app.get('/removefinder/:details',function(req,res){
 				}
 				dbDeploy.push(matchitem);
 				dbRef.child(v.key).remove();
+
 				//-----------------socket-io
 				var entireData=dataForDashboard();
 				io.sockets.emit('entireData',entireData);
 				//-----------------socket-io
+				
 				res.send("perfecto");
 			}
 		});
@@ -168,7 +170,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 			  if (data.torf){
 			  	dbRef.push(data);
 			  	var entireData=dataForDashboard();
-				io.sockets.emit('entireData',entireData);
+				io.sockets.emit('message',"send process is called");
 			  }
 			
 			initiatematchingwithfound(countryCode, data); //this function runs each time refresh is called
@@ -178,10 +180,12 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 				//FOUND
 				//Update found items , Match items , Send status to bot
 				db.ref(countryCode+'/'+ data["itemtype"]+'/found').push(data);
+
 				//-----------------socket-io
 				var entireData=dataForDashboard();
-				io.sockets.emit('entireData',entireData);
+				io.sockets.emit('message',"send process is called");
 				//-----------------socket-io
+				
 				res.send("all ok");
 			}
 

@@ -94,11 +94,11 @@
 				</div>
 				<div class="eachValue">
 					<p>Total reward offered by owners</p>
-					<p id="total matches" style="font-size: 1.5em; color: #f4b324; margin-top: 10px"><span id="rupees">Rs</span> {{lostReward}}</p>
+					<p id="lost reward" style="font-size: 1.5em; color: #f4b324; margin-top: 10px"><span id="rupees">Rs</span> {{lostReward}}</p>
 				</div>
 				<div class="eachValue">
 					<p>Total reward demanded by finders</p>
-					<p id="total matches" style="font-size: 1.5em; color: #f4b324;margin-top: 10px"><span id="rupees">Rs</span> {{foundReward}}</p>
+					<p id="found reward" style="font-size: 1.5em; color: #f4b324;margin-top: 10px"><span id="rupees">Rs</span> {{foundReward}}</p>
 				</div>
 				
 			</div>
@@ -113,9 +113,9 @@
 	var socket;
 	// socket = io.connect('http://localhost:3000');
 	socket = io.connect('www.sparreo.com');
-	socket.on('entireData', newData);
+	socket.on('message', newData);
 	function newData(data){
-		document.getElementById("total matches").innerHTML=data.totalMatches;
+		document.getElementById("total matches").innerHTML=data;
 	}
 
 </script>
