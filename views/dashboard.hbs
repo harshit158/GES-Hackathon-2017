@@ -292,11 +292,12 @@
 				var arrays=[lostDataArray,foundDataArray];
 				for(var j in arrays){
 						var dataArray = arrays[j];
+						console.log(dataArray);
 						for(var i=0;i<dataArray.length;i++){
 
-								var lat=dataArray[i].lat;
-								var lang=dataArray[i].lang;
-								var islost=dataArray[i].islost;
+								var lat= JSON.parse(dataArray[i]).lat;
+								var lang=JSON.parse(dataArray[i]).lang;
+								var islost=JSON.parse(dataArray[i]).islost;
 
 								var currLatLang= new google.maps.LatLng(lat, lang);
 
@@ -318,11 +319,6 @@
 	});
 
 </script>
-
-<!--
-To use this code on your website, get a free API key from Google.
-Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
--->
 
 
 </body>
