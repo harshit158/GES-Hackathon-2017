@@ -109,7 +109,7 @@
 
 </div>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	var socket;
 	var lostDataArray;
 	var foundDataArray;
@@ -130,12 +130,31 @@
 		document.getElementById("total matches").innerHTML=data.totalMatches;
 	});
 
-
-
-</script>
+</script> -->
 
 <script >
 	$( window ).on("load",function() {
+
+			var socket;
+			var lostDataArray;
+			var foundDataArray;
+			// socket = io.connect('http://localhost:3000');
+			socket = io.connect('www.sparreo.com');
+			// socket.on('start', function(data){
+			// 	document.getElementById("title").innerHTML=data;
+			// });
+
+			socket.on('dataForDashboard', function(data){
+				var data = JSON.parse(data);
+				lostDataArray = data.lostData;
+				foundDataArray = data.foundData;
+				document.getElementById("total lost").innerHTML=data.lostData.length;
+				document.getElementById("total found").innerHTML=data.foundData.length;
+				document.getElementById("lost reward").innerHTML=data.lostReward;
+				document.getElementById("found reward").innerHTML=data.foundReward;
+				document.getElementById("total matches").innerHTML=data.totalMatches;
+			});
+
 
 			var mapCanvas = document.getElementById("map");
 			var mylatlang = new google.maps.LatLng(22.316833, 87.307273); 
