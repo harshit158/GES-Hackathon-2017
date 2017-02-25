@@ -249,7 +249,7 @@
 				document.getElementById("found reward").innerHTML=data.foundReward;
 				document.getElementById("total matches").innerHTML=data.totalMatches;
 
-				check=false;
+				plot_markers();
 			});
 			//--------------------------------------
 			
@@ -288,7 +288,7 @@
 					}
 			}
 
-			else{
+			function plot_markers(){
 				var arrays=[lostDataArray,foundDataArray];
 				for(var j in arrays){
 						var dataArray = arrays[j];
