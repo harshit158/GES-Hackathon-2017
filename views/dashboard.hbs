@@ -239,9 +239,8 @@
 						for(var i=0;i<dataArray.length;i++){
 
 								var lat= JSON.parse(dataArray[i]).lat;
-								alert("the lat is: "+ lat);
-								var lang=JSON.parse(dataArray[i]).lang;
-								var islost=JSON.parse(dataArray[i]).islost;
+								var lang=parseFloat(dataArray[i].lang);
+								var islost=parseFloat(dataArray[i].islost);
 
 								var currLatLang= new google.maps.LatLng(lat, lang);
 
