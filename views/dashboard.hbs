@@ -222,7 +222,7 @@
 				document.getElementById("total found").innerHTML=data.foundData.length;
 				document.getElementById("lost reward").innerHTML=data.lostReward;
 				document.getElementById("found reward").innerHTML=data.foundReward;
-				document.getElementById("rupees").innerHTML="Rs";
+				document.getElementById("rupees").innerHTML="Rs ";
 				document.getElementById("total matches").innerHTML=data.totalMatches;
 
 
@@ -238,7 +238,7 @@
 						console.log(dataArray);
 						for(var i=0;i<dataArray.length;i++){
 
-								var lat= parseFloat(dataArray[i]).lat;
+								var lat= parseFloat(dataArray[i].lat);
 								var lang=parseFloat(dataArray[i].lang);
 								var islost=dataArray[i].islost;
 
