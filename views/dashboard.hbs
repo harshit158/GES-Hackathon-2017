@@ -252,41 +252,6 @@
 				plot_markers();
 			});
 			//--------------------------------------
-			
-			if(check===true){
-					// iteration over lost ans found data
-					var type=["lost","found"];
-					for(var j in type){
-							var getId = (type[j]=="lost")?"lostData":"foundData";
-							var putId = (type[j]=="lost")?"total lost":"total found";
-
-							var dataArray = document.getElementById(getId).getElementsByTagName("li");
-							document.getElementById(putId).innerHTML=dataArray.length;
-							
-							//adding markers	
-							for(var i=0;i<dataArray.length;i++){
-
-								//parsing data from lostData array
-								var lat=parseFloat(dataArray[i].innerHTML.split(",")[0]);
-								var lang=parseFloat(dataArray[i].innerHTML.split(",")[1]);
-								var islost=dataArray[i].innerHTML.split(",")[2];
-
-								var currLatLang= new google.maps.LatLng(lat, lang);
-
-								if(islost==="false")
-									var Icon='http://maps.google.com/mapfiles/ms/icons/green-dot.png';
-								else 
-									var Icon='http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-
-								var marker = new google.maps.Marker({
-									icon: Icon,
-								    position: currLatLang,
-								    map: map,
-								    title: islost
-							  	});
-							}
-					}
-			}
 
 			function plot_markers(){
 				var arrays=[lostDataArray,foundDataArray];
@@ -314,8 +279,45 @@
 							  	});
 						}
 				}
-				check=true;
 			}
+
+
+			
+			// iteration over lost ans found data
+			var type=["lost","found"];
+			for(var j in type){
+					var getId = (type[j]=="lost")?"lostData":"foundData";
+					var putId = (type[j]=="lost")?"total lost":"total found";
+
+					var dataArray = document.getElementById(getId).getElementsByTagName("li");
+					document.getElementById(putId).innerHTML=dataArray.length;
+					
+					//adding markers	
+					for(var i=0;i<dataArray.length;i++){
+
+						//parsing data from lostData array
+						var lat=parseFloat(dataArray[i].innerHTML.split(",")[0]);
+						var lang=parseFloat(dataArray[i].innerHTML.split(",")[1]);
+						var islost=dataArray[i].innerHTML.split(",")[2];
+
+						var currLatLang= new google.maps.LatLng(lat, lang);
+
+						if(islost==="false")
+							var Icon='http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+						else 
+							var Icon='http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+
+						var marker = new google.maps.Marker({
+							icon: Icon,
+						    position: currLatLang,
+						    map: map,
+						    title: islost
+					  	});
+					}
+			}
+			
+
+			
 	});
 
 </script>
