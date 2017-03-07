@@ -199,6 +199,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 					console.log("The output is: ",snap.val());
 
 					var obj=snap.val();
+
 					if(!obj){
 						res.end("andhera kayam");
 						return;
@@ -214,8 +215,7 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 					for(var i=0;i<founditemsincountry.length;i++){
 						var iteratedfounditem=founditemsincountry[i];
 						var distance=calcCrow(iteratedfounditem,lostdata);
-
-						if(distance<5 && priceCheck(iteratedfounditem.reward,lostdata.reward)===true){
+						if(distance<10 && priceCheck(iteratedfounditem.reward,lostdata.reward)===true){
 								var item=iteratedfounditem.itemtype;
 								if(item=="bank card" || item=="id card" || item=="passport"){
 									if(lostdata.uniquename==iteratedfounditem.uniquename){
@@ -250,14 +250,22 @@ app.get('/sendprocessretrieve/:Itemdata/', function(req, res) {
 			          					"title":iteratedfounditem.userid+'#'+i
 			          				}]
 			          			};
+
+			          			console.log("prepareditem is", prepareditem)
 			          			items.push(prepareditem);
 			          		}	//if match
 			          	}//for loop
 
 			          //all weapons deployed
 			          //ab goli maaro
+			          if(items.length>0){
 			          res.send(items)
 			          return;
+			      	  }
+			      	  else{
+			      	  	res.send("kuch nahin")
+			      	  	return;
+			      	  }
 
 
 			      } //else
